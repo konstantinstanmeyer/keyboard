@@ -58,7 +58,12 @@ export default function Test(){
     //     }
     // }, [keyDown])
 
+    // window.scrollY + document.querySelector('#elementId').getBoundingClientRect().top is for y or top coordinate
+    // window.scrollX + document.querySelector('#elementId').getBoundingClientRect().left is for x or left coordinate
+
+
     window.addEventListener('keydown', ({code}) => {
+        //fix
         let button = document.querySelector(`#${code.charAt(code.length-1).toLowerCase()}`);
         button.classList.remove('text-emerald-500');
         button.classList.remove('bg-sky-900');
@@ -67,6 +72,7 @@ export default function Test(){
     })
 
     window.addEventListener('keyup', e => {
+        //fix
         let button = document.querySelector(`#${e.code.charAt(e.code.length-1).toLowerCase()}`);
         button.classList.remove('bg-emerald-500');
         button.classList.remove('text-sky-900');
