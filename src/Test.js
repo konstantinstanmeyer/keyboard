@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import uuid from 'react-uuid';
 import Keyboard from "./Keyboard";
 
@@ -6,9 +6,47 @@ export default function Test(){
     const words = ["yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no"];
     const [blur, setBlur] = useState(false);
     const [inputValue, setInputValue] = useState("");
-    const [gameState, setGameState] = useState("not started")
+    const [gameState, setGameState] = useState("not started");
     const inputField = document.querySelector("#typeInput");
-    const [keyDown, setKeyDown] = useState(0);
+    const keyDownTimer = useRef(null);
+    const [valueHolder, setValueHolder] = useState(false)
+
+    useEffect(() => {
+        const keyDownWait = 3000
+        if (valueHolder == false) {
+            clearTimeout(keyDownTimer.current)
+            keyDownTimer.current = setTimeout(() => {
+                setBlur(true);
+                document.activeElement.blur()
+            }, keyDownWait)
+            setValueHolder(true)
+        }
+
+        window.addEventListener('keydown', (e) => {
+            const button = document.querySelector(`#${e.code.charAt(e.code.length-1).toLowerCase()}`);
+            //fix
+            button.classList.remove('text-emerald-500');
+            button.classList.remove('bg-sky-900');
+            button.classList.add('bg-emerald-500');
+            button.classList.add('text-sky-900');
+            inputField.disabled = false;
+        })
+
+        window.addEventListener('keyup', e => {
+            const button = document.querySelector(`#${e.code.charAt(e.code.length-1).toLowerCase()}`);
+            let focus = document.querySelector("#typeInput");
+            setBlur(false);
+            focus.focus();
+            clearTimeout(keyDownTimer.current)
+            keyDownTimer.current = setTimeout(() => {
+                setBlur(true);
+            }, keyDownWait)
+            button.classList.remove('bg-emerald-500');
+            button.classList.remove('text-sky-900');
+            button.classList.add('bg-sky-900');
+            button.classList.add('text-emerald-500');
+        })
+    }, [])
 
     useEffect(() => {
         if(gameState === "not started" && inputValue !== "") {
@@ -42,47 +80,21 @@ export default function Test(){
         return wordsList;
     }
 
-    function noInput(){
-        setBlur(true);
-    }
-
-    let textTimer;
-
-    if (gameState === "not started"){
-        textTimer = window.setTimeout(noInput, 3000);
-    }
-
-    // useEffect(() => {
-    //     if (gameState == "not started"){
-    //         textTimer = window.setTimeout(noInput, 3000)
-    //     }
-    // }, [keyDown])
 
     // window.scrollY + document.querySelector('#elementId').getBoundingClientRect().top is for y or top coordinate
     // window.scrollX + document.querySelector('#elementId').getBoundingClientRect().left is for x or left coordinate
 
 
-    window.addEventListener('keydown', ({code}) => {
-        //fix
-        let button = document.querySelector(`#${code.charAt(code.length-1).toLowerCase()}`);
-        button.classList.remove('text-emerald-500');
-        button.classList.remove('bg-sky-900');
-        button.classList.add('bg-emerald-500');
-        button.classList.add('text-sky-900');
-    })
-
-    window.addEventListener('keyup', e => {
-        //fix
-        let button = document.querySelector(`#${e.code.charAt(e.code.length-1).toLowerCase()}`);
-        button.classList.remove('bg-emerald-500');
-        button.classList.remove('text-sky-900');
-        button.classList.add('bg-sky-900');
-        button.classList.add('text-emerald-500');
-        let focus = document.querySelector("#typeInput");
-        setBlur(false);
-        focus.focus();
-        clearTimeout(textTimer);
-    })
+    // window.addEventListener('keydown', ({code}) => {
+    //     //fix
+    //     let button = document.querySelector(`#${code.charAt(code.length-1).toLowerCase()}`);
+    //     inputField.disabled = false;
+    //     button.classList.remove('text-emerald-500');
+    //     button.classList.remove('bg-sky-900');
+    //     button.classList.add('bg-emerald-500');
+    //     button.classList.add('text-sky-900');
+    //     console.log(1);
+    // })
 
     // function validateInput(input){
     //     let master = words
@@ -104,7 +116,7 @@ export default function Test(){
     return (
         <div id="test-page" className="w-1/3 h-32 ml-2 pt-3">
             <div id="test-zone" className={`overflow-hidden h-24 bg-emerald-600 rounded-lg ${blur ? 'blur-sm transition duration-300' : null} relative`} onClick={() => inputField.focus()}>
-                <input id="typeInput" autoFocus className="absolute z-10" onFocus={() => setBlur(false)} onBlur={() => setBlur(true)} value={inputValue} onChange={(e) => setInputValue(e.target.value)}/>
+                <input id="typeInput" autoFocus className="absolute z-10" onFocus={() => setBlur(false)} value={inputValue} onChange={(e) => setInputValue(e.target.value)}/>
                 <div id="text-area" className="flex flex-wrap z-0 absolute">
                     {iterateWords(words)}
                 </div>
