@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import uuid from 'react-uuid';
 import Keyboard from "./Keyboard";
 
 export default function Test(){
@@ -14,6 +13,8 @@ export default function Test(){
     const [wordsArray, setWordsArray] = useState([])
     const [characterIndex, setCharacterIndex] = useState(0)
     const [wordIndex, setWordIndex] = useState(0)
+    let wordZone = document.querySelector('#word-zone')
+    // console.log(wordZone)
 
     useEffect(() => {
         const keyDownWait = 3000
@@ -46,6 +47,7 @@ export default function Test(){
             if(gameState == "not started") {
                 keyDownTimer.current = setTimeout(() => {
                     setBlur(true);
+                    document.activeElement.blur()
                 }, keyDownWait)
             }
             button.classList.remove('bg-emerald-500');
@@ -54,9 +56,18 @@ export default function Test(){
             button.classList.add('text-emerald-500');
         })
 
-        setWordsArray(iterateWords(words))
-        console.log(wordsArray)
+        // setWordsArray(iterateWords(words))
+        // console.log(wordsArray)
     }, [])
+
+    function validatedWords(word){
+        let lettersArray = [];
+        word.split("").forEach((wordy) => {
+            lettersArray.push(<span className="text-lg">{wordy}</span>)
+        })
+        return lettersArray;
+    }
+
 
     useEffect(() => {
         if(gameState === "not started" && inputValue !== "") {
@@ -68,44 +79,54 @@ export default function Test(){
 
     //code for id'd and iterated word div's/pre p-tag switch
 
-    function createWords(words, wordIndex){
-        return(
-            <div key={wordIndex} id={`word-${wordIndex}`} className="pl-2 h-8">
-                {iterate(words)}
-            </div>
-        )
-    }
+    // function createWords(words, wordIndex){
+    //     return(
+    //         <div key={wordIndex} id={`word-${wordIndex}`} className="pl-2 h-8">
+    //             {iterate(words)}
+    //         </div>
+    //     )
+    // }
 
-    function iterate(word){
-        let letters = [];
-        for (let i = 0; i < word.length; i++) {
-            letters.push(<letter key={uuid()} id={`letter-${i}`} className="text-2xl font-mono">{word[i]}</letter>);
-        }
-        return letters;
-    }
+    // function iterate(word){
+    //     let letters = [];
+    //     for (let i = 0; i < word.length; i++) {
+    //         letters.push(<letter key={uuid()} id={`letter-${i}`} className="text-2xl font-mono">{word[i]}</letter>);
+    //     }
+    //     return letters;
+    // }
 
-    function iterateWords(words){
-        let wordsList = [];
-        for (let i = 0; i < words.length; i++){
-            wordsList.push(createWords(words[i], i));
-        }
-        return wordsList;
-    }
+    // function iterateWords(words){
+    //     let wordsList = [];
+    //     for (let i = 0; i < words.length; i++){
+    //         wordsList.push(createWords(words[i], i));
+    //     }
+    //     return wordsList;
+    // }
 
-    if (inputValue.length > 0) console.log(inputField.value.split("")[0])
+    // if (inputValue.length > 0) console.log(inputField.value.split("")[0])
 
     function typing(){
-        let currentCharacter = inputField.value.split("")[characterIndex]
-        console.log(currentCharacter)
-        let master = words.join(" ");
-        if(inputValue.value !== ""){
-            if(master[currentCharacter] === currentCharacter){
-                console.log("yes")
-                console.log(wordsArray[wordIndex][1])
-                wordsArray[wordIndex][characterIndex].classList.add('text-green-500')
+        let currentCharacter = '';
+        if (inputValue.split("")[characterIndex]){
+            currentCharacter = inputField.split("")[characterIndex]
+        }
+        const characters = document.querySelectorAll('span')
+        console.log(characters[characterIndex])
+        console.log(characterIndex)
+        if(inputValue.value !== "" && currentCharacter !== ''){
+            console.log("seen")
+            if(characters[characterIndex].innerHtml === currentCharacter){
+                characters[characterIndex].classList.add('text-green-500')
+                console.log("true")
+                setCharacterIndex(characterIndex++)
+            } else {
+                characters[characterIndex].classList.add('text-red-500')
+                setCharacterIndex(characterIndex++)
             }
         }
     }
+
+    
 
 
     // window.scrollY + document.querySelector('#elementId').getBoundingClientRect().top is for y or top coordinate
@@ -140,12 +161,19 @@ export default function Test(){
     //     }
     // }
 
+    function started(){
+        inputField.focus();
+        setBlur(false)
+    }
+
+    // if (gameState == "started") started();
+
     return (
         <div id="test-page" className="w-1/3 h-32 ml-2 pt-3">
+            <input id="typeInput" autoFocus className="z-10" onFocus={() => setBlur(false)} value={inputValue} onChange={(e) => setInputValue(e.target.value)}/>
             <div id="test-zone" className={`overflow-hidden h-24 bg-emerald-600 rounded-lg ${blur ? 'blur-sm transition duration-300' : null} relative`} onClick={() => inputField.focus()}>
-                <input id="typeInput" autoFocus className="absolute z-10" onFocus={() => setBlur(false)} value={inputValue} onChange={(e) => setInputValue(e.target.value)}/>
-                <div id="text-area" className="flex flex-wrap z-0 absolute">
-                    {iterateWords(words)}
+                <div id="text-area" className="flex break-words z-0 absolute">
+                    <p id="word-zone">{validatedWords(word)}</p>
                 </div>
             </div>
             {blur ? <p className="absolute">press any button to refocus</p> : null}
