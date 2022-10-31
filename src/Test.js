@@ -8,21 +8,18 @@ export default function Test(){
     const [gameState, setGameState] = useState("not started");
     const inputField = document.querySelector("#typeInput");
     const keyDownTimer = useRef(null);
-    const [valueHolder, setValueHolder] = useState(false)
     const [characterIndex, setCharacterIndex] = useState(0)
+    const [errors, setErrors] = useState(0)
     const c = console.log.bind(document)
-    // console.log(wordZone)
 
     useEffect(() => {
         const keyDownWait = 3000
-        if (valueHolder == false) {
-            clearTimeout(keyDownTimer.current)
-            keyDownTimer.current = setTimeout(() => {
-                setBlur(true);
-                document.activeElement.blur()
-            }, keyDownWait)
-            setValueHolder(true)
-        }
+        
+        clearTimeout(keyDownTimer.current)
+        keyDownTimer.current = setTimeout(() => {
+            setBlur(true);
+            document.activeElement.blur()
+        }, keyDownWait)
 
         window.addEventListener('keydown', (e) => {
             const button = document.querySelector(`#${e.code.charAt(e.code.length-1).toLowerCase()}`);
@@ -56,19 +53,22 @@ export default function Test(){
     function validatedWords(word){
         let lettersArray = [];
         word.split("").forEach((wordy) => {
-            lettersArray.push(<span className="text-lg">{wordy}</span>)
+            lettersArray.push(<span className="text-2xl">{wordy}</span>)
         })
         return lettersArray;
     }
 
 
     useEffect(() => {
+        let characters = document.querySelectorAll('span')
         if(gameState === "not started" && inputValue !== "") {
             setGameState("started")
         } else if (gameState === "started") {
             
         }
-        typing();
+        if (inputValue.length >= 1){
+            typing();
+        }
     }, [inputValue])
 
     //code for id'd and iterated word div's/pre p-tag switch
@@ -99,36 +99,47 @@ export default function Test(){
 
     // if (inputValue.length > 0) console.log(inputField.value.split("")[0])
 
+    // useEffect(() => {
+    //     let characters = document.querySelectorAll('span')
+    //     if (inputValue[characterIndex] === undefined){
+    //         characters[characterIndex].classList.remove('text-green-500', 'text-red-500')
+    //     }
+    //     c(characterIndex)
+    // }, [characterIndex])
+
     function typing(){
-        let currentCharacter = '';
-        if (inputValue.split("")[characterIndex]){
-            if (inputField.length <= 1){
-            currentCharacter = inputField[characterIndex]
-            } else {
-                currentCharacter = inputValue[characterIndex]
-            }
-        }
-        const characters = document.querySelectorAll('span')
-        c(characters[characterIndex].innerHTML)
-        c(characterIndex)
-        c(inputValue[characterIndex])
-        c(currentCharacter)
-        if(inputValue.value !== "" && currentCharacter !== ''){
-            if(inputValue[characterIndex] === characters[characterIndex].innerHTML){
-                characters[characterIndex].classList.add('text-green-500')
-                c("correct")
-                setCharacterIndex(characterIndex + 1)
-            } else if(inputValue[characterIndex] === undefined){
-                c('backspace handled')
-                setCharacterIndex(characterIndex - 1)
-                characters[characterIndex].classList.remove('text-green-500', 'text-red-500')
-            } else {
-                characters[characterIndex].classList.add('text-red-500')
-                setCharacterIndex(characterIndex + 1)
-                c("incorrect")
-            }
+        const characters = document.querySelectorAll('span');
+
+        c(characters[characterIndex].innerHTML);
+        c(inputValue[characterIndex]);
+        c(characterIndex);
+
+        if(inputValue[characterIndex] === characters[characterIndex].innerHTML){
+            setCharacterIndex(characterIndex => characterIndex + 1)
+            characters[characterIndex].classList.add('text-green-500')
+            c("correct")
+        } else if (inputValue[characterIndex] === undefined ){
+            let characterValue = characterIndex - 1
+            characters[characterValue].classList.remove('text-green-500', 'text-red-500')
+            // c('backspace handled')
+            setCharacterIndex(characterIndex => characterIndex - 1)
+            // characters[characterIndex].classList.remove('text-green-500', 'text-red-500')
+            // c(characterIndex)
+        } else if(inputValue[characterIndex] !== characters[characterIndex].innerHTML) {
+            setCharacterIndex(characterIndex => characterIndex + 1)
+            characters[characterIndex].classList.add('text-red-500')
+            c("incorrect")
+        } else if (inputValue.length == 0){
+            setCharacterIndex(1)
+            characters[0].classList.remove('text-green-500', 'text-red-500')
         }
     }
+
+    // else if(inputValue[characterIndex] === undefined){
+    //     c('backspace handled')
+    //     setCharacterIndex(characterIndex - 1)
+    //     characters[characterIndex].classList.remove('text-green-500', 'text-red-500')
+    // }
 
 
     // window.scrollY + document.querySelector('#elementId').getBoundingClientRect().top is for y or top coordinate
@@ -163,19 +174,14 @@ export default function Test(){
     //     }
     // }
 
-    function started(){
-        inputField.focus();
-        setBlur(false)
-    }
-
     // if (gameState == "started") started();
 
     return (
         <div id="test-page" className="w-1/3 h-32 ml-2 pt-3">
-            <input id="typeInput" autoFocus className="z-10" onFocus={() => setBlur(false)} value={inputValue} onChange={(e) => setInputValue(e.target.value)}/>
-            <div id="test-zone" className={`overflow-hidden h-24 bg-emerald-600 rounded-lg ${blur ? 'blur-sm transition duration-300' : null} relative`} onClick={() => inputField.focus()}>
-                <div id="text-area" className="flex break-words z-0 absolute">
-                    <p id="word-zone" className="">{validatedWords(word)}</p>
+            <input id="typeInput" autoFocus className="absolute -z-10" onFocus={() => setBlur(false)} value={inputValue} onChange={(e) => setInputValue(e.target.value)}/>
+            <div id="test-zone" className={`h-fit justify-center flex bg-emerald-600 rounded-lg ${blur ? 'blur-sm transition duration-300' : null} relative`} onClick={() => inputField.focus()}>
+                <div id="text-area" className="flex break-words z-0">
+                    <p id="word-zone" className="text-center">{validatedWords(word)}</p>
                 </div>
             </div>
             {blur ? <p className="absolute">press any button to refocus</p> : null}
