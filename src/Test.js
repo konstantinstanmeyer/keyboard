@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import Keyboard from "./Keyboard";
 
 export default function Test(){
-    const words = ["yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no"];
     const word = "yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes no no no no no no no no no no no no no no no no no"
     const [blur, setBlur] = useState(false);
     const [inputValue, setInputValue] = useState("");
@@ -10,10 +9,8 @@ export default function Test(){
     const inputField = document.querySelector("#typeInput");
     const keyDownTimer = useRef(null);
     const [valueHolder, setValueHolder] = useState(false)
-    const [wordsArray, setWordsArray] = useState([])
     const [characterIndex, setCharacterIndex] = useState(0)
-    const [wordIndex, setWordIndex] = useState(0)
-    let wordZone = document.querySelector('#word-zone')
+    const c = console.log.bind(document)
     // console.log(wordZone)
 
     useEffect(() => {
@@ -35,7 +32,6 @@ export default function Test(){
             button.classList.add('bg-emerald-500');
             button.classList.add('text-sky-900');
             // inputField.disabled = false;
-            typing();
         })
 
         window.addEventListener('keyup', e => {
@@ -44,10 +40,10 @@ export default function Test(){
             setBlur(false);
             focus.focus();
             clearTimeout(keyDownTimer.current)
-            if(gameState == "not started") {
+            if(gameState === "not started") {
                 keyDownTimer.current = setTimeout(() => {
                     setBlur(true);
-                    document.activeElement.blur()
+                    document.activeElement.blur();
                 }, keyDownWait)
             }
             button.classList.remove('bg-emerald-500');
@@ -55,9 +51,6 @@ export default function Test(){
             button.classList.add('bg-sky-900');
             button.classList.add('text-emerald-500');
         })
-
-        // setWordsArray(iterateWords(words))
-        // console.log(wordsArray)
     }, [])
 
     function validatedWords(word){
@@ -75,6 +68,7 @@ export default function Test(){
         } else if (gameState === "started") {
             
         }
+        typing();
     }, [inputValue])
 
     //code for id'd and iterated word div's/pre p-tag switch
@@ -108,25 +102,33 @@ export default function Test(){
     function typing(){
         let currentCharacter = '';
         if (inputValue.split("")[characterIndex]){
-            currentCharacter = inputField.split("")[characterIndex]
+            if (inputField.length <= 1){
+            currentCharacter = inputField[characterIndex]
+            } else {
+                currentCharacter = inputValue[characterIndex]
+            }
         }
         const characters = document.querySelectorAll('span')
-        console.log(characters[characterIndex])
-        console.log(characterIndex)
+        c(characters[characterIndex].innerHTML)
+        c(characterIndex)
+        c(inputValue[characterIndex])
+        c(currentCharacter)
         if(inputValue.value !== "" && currentCharacter !== ''){
-            console.log("seen")
-            if(characters[characterIndex].innerHtml === currentCharacter){
+            if(inputValue[characterIndex] === characters[characterIndex].innerHTML){
                 characters[characterIndex].classList.add('text-green-500')
-                console.log("true")
-                setCharacterIndex(characterIndex++)
+                c("correct")
+                setCharacterIndex(characterIndex + 1)
+            } else if(inputValue[characterIndex] === undefined){
+                c('backspace handled')
+                setCharacterIndex(characterIndex - 1)
+                characters[characterIndex].classList.remove('text-green-500', 'text-red-500')
             } else {
                 characters[characterIndex].classList.add('text-red-500')
-                setCharacterIndex(characterIndex++)
+                setCharacterIndex(characterIndex + 1)
+                c("incorrect")
             }
         }
     }
-
-    
 
 
     // window.scrollY + document.querySelector('#elementId').getBoundingClientRect().top is for y or top coordinate
@@ -173,7 +175,7 @@ export default function Test(){
             <input id="typeInput" autoFocus className="z-10" onFocus={() => setBlur(false)} value={inputValue} onChange={(e) => setInputValue(e.target.value)}/>
             <div id="test-zone" className={`overflow-hidden h-24 bg-emerald-600 rounded-lg ${blur ? 'blur-sm transition duration-300' : null} relative`} onClick={() => inputField.focus()}>
                 <div id="text-area" className="flex break-words z-0 absolute">
-                    <p id="word-zone">{validatedWords(word)}</p>
+                    <p id="word-zone" className="">{validatedWords(word)}</p>
                 </div>
             </div>
             {blur ? <p className="absolute">press any button to refocus</p> : null}
