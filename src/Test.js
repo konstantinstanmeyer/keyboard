@@ -4,12 +4,16 @@ import Keyboard from "./Keyboard";
 
 export default function Test(){
     const words = ["yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no", "no"];
+    const word = "yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes no no no no no no no no no no no no no no no no no"
     const [blur, setBlur] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [gameState, setGameState] = useState("not started");
     const inputField = document.querySelector("#typeInput");
     const keyDownTimer = useRef(null);
     const [valueHolder, setValueHolder] = useState(false)
+    const [wordsArray, setWordsArray] = useState([])
+    const [characterIndex, setCharacterIndex] = useState(0)
+    const [wordIndex, setWordIndex] = useState(0)
 
     useEffect(() => {
         const keyDownWait = 3000
@@ -29,7 +33,8 @@ export default function Test(){
             button.classList.remove('bg-sky-900');
             button.classList.add('bg-emerald-500');
             button.classList.add('text-sky-900');
-            inputField.disabled = false;
+            // inputField.disabled = false;
+            typing();
         })
 
         window.addEventListener('keyup', e => {
@@ -38,14 +43,19 @@ export default function Test(){
             setBlur(false);
             focus.focus();
             clearTimeout(keyDownTimer.current)
-            keyDownTimer.current = setTimeout(() => {
-                setBlur(true);
-            }, keyDownWait)
+            if(gameState == "not started") {
+                keyDownTimer.current = setTimeout(() => {
+                    setBlur(true);
+                }, keyDownWait)
+            }
             button.classList.remove('bg-emerald-500');
             button.classList.remove('text-sky-900');
             button.classList.add('bg-sky-900');
             button.classList.add('text-emerald-500');
         })
+
+        setWordsArray(iterateWords(words))
+        console.log(wordsArray)
     }, [])
 
     useEffect(() => {
@@ -56,9 +66,11 @@ export default function Test(){
         }
     }, [inputValue])
 
+    //code for id'd and iterated word div's/pre p-tag switch
+
     function createWords(words, wordIndex){
         return(
-            <div key={wordIndex} id={wordIndex} className="pl-2 h-8">
+            <div key={wordIndex} id={`word-${wordIndex}`} className="pl-2 h-8">
                 {iterate(words)}
             </div>
         )
@@ -67,7 +79,7 @@ export default function Test(){
     function iterate(word){
         let letters = [];
         for (let i = 0; i < word.length; i++) {
-            letters.push(<letter key={uuid()} id={i} className="text-2xl font-mono">{word[i]}</letter>);
+            letters.push(<letter key={uuid()} id={`letter-${i}`} className="text-2xl font-mono">{word[i]}</letter>);
         }
         return letters;
     }
@@ -78,6 +90,21 @@ export default function Test(){
             wordsList.push(createWords(words[i], i));
         }
         return wordsList;
+    }
+
+    if (inputValue.length > 0) console.log(inputField.value.split("")[0])
+
+    function typing(){
+        let currentCharacter = inputField.value.split("")[characterIndex]
+        console.log(currentCharacter)
+        let master = words.join(" ");
+        if(inputValue.value !== ""){
+            if(master[currentCharacter] === currentCharacter){
+                console.log("yes")
+                console.log(wordsArray[wordIndex][1])
+                wordsArray[wordIndex][characterIndex].classList.add('text-green-500')
+            }
+        }
     }
 
 
