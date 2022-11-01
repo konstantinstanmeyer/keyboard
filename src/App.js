@@ -5,24 +5,22 @@ import Home from './Home';
 import Test from './Test';
 import Signup from './Signup';
 import Navbar from './Navbar';
+import Leaderboard from './LeaderboardRow';
 
 function App() {
   return (
-    <div className="bg-emerald-500 w-screen h-screen justify-center">
-      <Navbar />
+    <div className="bg-emerald-500 fixed w-screen h-screen justify-center">
       <Router>
+        <Navbar />
         <Routes>
           <Route exact path="/" element={
-            <Home />
+            <Test />
           }/>
           <Route path="/signup" element={
             <Signup />
           }/>
-          <Route path="/test" element={
-            <Test />
-          }/>
-          <Route path="/navbar" element={
-            <Navbar />
+          <Route path="/leaderboard" element={
+            <Leaderboard />
           }/>
         </Routes>
       </Router>

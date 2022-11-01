@@ -177,16 +177,20 @@ export default function Test(){
     // if (gameState == "started") started();
 
     return (
-        <div id="test-page" className="w-1/3 h-32 mx-auto">
-            <input id="typeInput" autoFocus className="absolute -z-10" onFocus={() => setBlur(false)} value={inputValue} onChange={(e) => setInputValue(e.target.value)}/>
-            <div id="test-zone" className={`h-fit justify-center flex mt-40 my-5 bg-emerald-600 rounded-lg ${blur ? 'blur-sm transition duration-300' : null} relative`} onClick={() => inputField.focus()}>
-                <div id="text-area" className="flex break-words z-0">
-                    <p id="word-zone" className="text-center select-none">{validatedWords(word)}</p>
+        <div className="items-center h-1/2 relative">
+            <div id="test-page" className="w-1/3 mx-auto relative">
+                <input id="typeInput" autocomplete="off" autoFocus className="opacity-0 absolute" onFocus={() => setBlur(false)} value={inputValue} onChange={(e) => setInputValue(e.target.value)}/>
+                <div className="relative flex flex-col justify-center mb-10">
+                    <div id="test-zone" className={`h-fit justify-center flex mt-16 my-5 bg-emerald-600 rounded-lg ${blur ? 'blur-sm transition duration-300' : null} relative`} onClick={() => inputField.focus()}>
+                        <div id="text-area" className="flex break-words z-0">
+                            <p id="word-zone" className="text-center select-none">{validatedWords(word)}</p>
+                        </div>
+                    </div>
+                    {blur ? <h2 className="absolute -bottom-3 text-center">press any button to refocus</h2> : null}
                 </div>
+                <Keyboard />
+                {gameState}
             </div>
-            {blur ? <p className="absolute">press any button to refocus</p> : null}
-            <Keyboard />
-            {gameState}
         </div>
     )
 }
