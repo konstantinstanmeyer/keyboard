@@ -10,14 +10,14 @@ export default function Signin(){
     const submitButton = document.querySelectorAll("#submit-button")
     const emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
 
-    //   fetch("http://localhost:3000/signup", {
+//       fetch("http://localhost:3000/signup", {
 //   method: "post",
 //   headers: {
 //     "Content-Type": "application/json",
 //   },
 //   body: JSON.stringify({
 //     user: {
-//       email: "test2@test.com",
+//       email: "test5@test.com",
 //       password: "password",
 //     },
 //   }),
@@ -57,7 +57,7 @@ export default function Signin(){
         })
         .then((res) => {
             if (res.ok) {
-            console.log(res.headers.get("Authorization"));
+            console.log(res);
             localStorage.setItem("token", res.headers.get("Authorization"));
             return res.json();
             } else {

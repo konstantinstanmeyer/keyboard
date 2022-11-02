@@ -4,6 +4,26 @@ import { useNavigate } from 'react-router-dom';
 export default function Navbar(){
     const navigate = useNavigate();
 
+    function handleLogout(){
+        let token = localStorage.getItem('token')
+        fetch(`http://localhost:3000/logout`,{
+            method: "DELETE",
+            headers: {
+                Authorization: token
+            }
+        })
+        .then(r => {
+            if(r.ok){
+                localStorage.removeItem('token');
+                navigate('/login');
+            } else {
+                throw new Error(r.status)
+            }
+        })
+    }
+
+    console.log(localStorage.getItem('token'))
+
     return(
         <div className="relative w-3/4 z-20 mx-auto pt-20">
             <div className="bg-sky-900 flex flex-row items-center w-3/4 h-14 mx-auto rounded-xl mb-7 relative">
@@ -21,6 +41,9 @@ export default function Navbar(){
                         </li>
                         <li className="mx-2">
                             <a onClick={() => navigate('/leaderboard')} className="hover:cursor-pointer hover:underline text-emerald-500">Leaderboard</a>
+                        </li>
+                        <li>
+                            <a onClick={handleLogout} className="hover:cursor-pointer hover:underline text-emerald-500">Log out</a>
                         </li>
                     </ul>
                     <img onClick={() => navigate('/profile')} src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" className="h-10 w-10 mr-4 hover:cursor-pointer"/>
