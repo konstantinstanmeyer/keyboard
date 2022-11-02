@@ -23,7 +23,7 @@ export default function Navbar(){
                             <a onClick={() => navigate('/leaderboard')} className="hover:cursor-pointer hover:underline text-emerald-500">Leaderboard</a>
                         </li>
                     </ul>
-                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" className="h-10 w-10 mr-4 hover:cursor-pointer"/>
+                    <img onClick={() => navigate('/profile')} src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" className="h-10 w-10 mr-4 hover:cursor-pointer"/>
                 </div>
             </div>
         </div>

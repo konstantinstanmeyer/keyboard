@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import Keyboard from "./Keyboard";
 
 export default function Test(){
-    const word = "yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes yes no no no no no no no no no no no no no no no no no"
+    const word = "program system public early can increase restaurant performance consider people planet interest head govern general possible who point write plant state develop"
     const [blur, setBlur] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [gameState, setGameState] = useState("not started");
@@ -60,7 +60,6 @@ export default function Test(){
 
 
     useEffect(() => {
-        let characters = document.querySelectorAll('span')
         if(gameState === "not started" && inputValue !== "") {
             setGameState("started")
         } else if (gameState === "started") {
@@ -110,9 +109,9 @@ export default function Test(){
     function typing(){
         const characters = document.querySelectorAll('span');
 
-        c(characters[characterIndex].innerHTML);
-        c(inputValue[characterIndex]);
-        c(characterIndex);
+        // c(characters[characterIndex].innerHTML);
+        // c(inputValue[characterIndex]);
+        // c(characterIndex);
 
         if(inputValue[characterIndex] === characters[characterIndex].innerHTML){
             setCharacterIndex(characterIndex => characterIndex + 1)
@@ -121,10 +120,7 @@ export default function Test(){
         } else if (inputValue[characterIndex] === undefined ){
             let characterValue = characterIndex - 1
             characters[characterValue].classList.remove('text-green-500', 'text-red-500')
-            // c('backspace handled')
             setCharacterIndex(characterIndex => characterIndex - 1)
-            // characters[characterIndex].classList.remove('text-green-500', 'text-red-500')
-            // c(characterIndex)
         } else if(inputValue[characterIndex] !== characters[characterIndex].innerHTML) {
             setCharacterIndex(characterIndex => characterIndex + 1)
             characters[characterIndex].classList.add('text-red-500')
@@ -181,12 +177,12 @@ export default function Test(){
             <div id="test-page" className="w-1/3 mx-auto relative">
                 <input id="typeInput" autocomplete="off" autoFocus className="opacity-0 absolute" onFocus={() => setBlur(false)} value={inputValue} onChange={(e) => setInputValue(e.target.value)}/>
                 <div className="relative flex flex-col justify-center mb-10">
-                    <div id="test-zone" className={`h-fit justify-center flex mt-16 my-5 bg-emerald-600 rounded-lg ${blur ? 'blur-sm transition duration-300' : null} relative`} onClick={() => inputField.focus()}>
+                    <div id="test-zone" className={`h-fit justify-center flex mt-16 my-5 py-1 bg-emerald-600 rounded-lg ${blur ? 'blur-sm transition duration-300' : null} relative`} onClick={() => inputField.focus()}>
                         <div id="text-area" className="flex break-words z-0">
                             <p id="word-zone" className="text-center select-none">{validatedWords(word)}</p>
                         </div>
                     </div>
-                    {blur ? <h2 className="absolute -bottom-3 text-center">press any button to refocus</h2> : null}
+                    {blur ? <h2 className="absolute -bottom-3 text-center">press any button to refocus or click text</h2> : null}
                 </div>
                 <Keyboard />
                 {gameState}
