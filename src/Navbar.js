@@ -17,7 +17,7 @@ export default function Navbar(){
                 <div className="ml-auto flex flex-row items-center">
                     <ul className="list-none p-0 flex flex-row mr-2">
                         <li className="mx-2">
-                            <a onClick={() => navigate('/signup')} className="hover:cursor-pointer hover:underline text-emerald-500">Sign In</a>
+                            <a onClick={() => navigate('/signin')} className="hover:cursor-pointer hover:underline text-emerald-500">Sign In</a>
                         </li>
                         <li className="mx-2">
                             <a onClick={() => navigate('/leaderboard')} className="hover:cursor-pointer hover:underline text-emerald-500">Leaderboard</a>
