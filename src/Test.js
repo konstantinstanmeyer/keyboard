@@ -183,11 +183,11 @@ export default function Test(){
                             <p id="word-zone" className="text-center select-none">{validatedWords(word)}</p>
                         </div>
                     </div>
-                    {blur ? <h2 className="absolute -bottom-3 text-center">press any button to refocus or click text</h2> : null}
+                    {blur ? <h2 className="absolute text-sm -bottom-5">press any button to refocus or click text</h2> : null}
                 </div>
                 <Keyboard />
-                {gameState}
             </div>
+            <p className="absolute bottom-20 left-12 text-xl font-bold">{gameState}</p>
         </div>
     )
 }
