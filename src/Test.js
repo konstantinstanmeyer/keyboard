@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { v4 as uuidv4 } from 'uuid';
 import Keyboard from "./Keyboard";
 
 export default function Test(){
@@ -53,7 +54,7 @@ export default function Test(){
     function validatedWords(word){
         let lettersArray = [];
         word.split("").forEach((wordy) => {
-            lettersArray.push(<span className="text-2xl">{wordy}</span>)
+            lettersArray.push(<span id={`${uuidv4()}`} className="text-2xl">{wordy}</span>)
         })
         return lettersArray;
     }
@@ -175,7 +176,7 @@ export default function Test(){
     return (
         <div className="items-center h-1/2 relative">
             <div id="test-page" className="w-1/3 mx-auto relative">
-                <input id="typeInput" autocomplete="off" autoFocus className="opacity-0 absolute" onFocus={() => setBlur(false)} value={inputValue} onChange={(e) => setInputValue(e.target.value)}/>
+                <input id="typeInput" autoComplete="off" autoFocus className="opacity-0 absolute" onFocus={() => setBlur(false)} value={inputValue} onChange={(e) => setInputValue(e.target.value)}/>
                 <div className="relative flex flex-col justify-center mb-10">
                     <div id="test-zone" className={`h-fit justify-center flex mt-16 my-5 py-1 bg-emerald-600 rounded-lg ${blur ? 'blur-sm transition duration-300' : null} relative`} onClick={() => inputField.focus()}>
                         <div id="text-area" className="flex break-words z-0">

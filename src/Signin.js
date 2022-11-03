@@ -65,6 +65,7 @@ export default function Signin(){
             }
         })
         .then((json) => console.dir(json))
+        .then(navigate('/'))
         .catch((err) => console.error(err));
     }
 

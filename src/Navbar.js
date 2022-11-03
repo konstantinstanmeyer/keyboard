@@ -1,8 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function Navbar(){
+export default function Navbar({ current_user }){
     const navigate = useNavigate();
+
+    function refreshPage() { window. location. reload(false); }
 
     function handleLogout(){
         let token = localStorage.getItem('token')
@@ -15,7 +17,7 @@ export default function Navbar(){
         .then(r => {
             if(r.ok){
                 localStorage.removeItem('token');
-                navigate('/login');
+                navigate('/');
             } else {
                 throw new Error(r.status)
             }
@@ -23,6 +25,8 @@ export default function Navbar(){
     }
 
     console.log(localStorage.getItem('token'))
+
+    console.log(current_user)
 
     return(
         <div className="relative w-3/4 z-20 mx-auto pt-20">
@@ -37,13 +41,13 @@ export default function Navbar(){
                 <div className="ml-auto flex flex-row items-center">
                     <ul className="list-none p-0 flex flex-row mr-2">
                         <li className="mx-2">
-                            <a onClick={() => navigate('/signin')} className="hover:cursor-pointer hover:underline text-emerald-500">Sign In</a>
+                            {current_user.ok ? null : <a onClick={() => navigate('/signin')} className="hover:cursor-pointer hover:underline text-emerald-500">Sign In</a>}
                         </li>
                         <li className="mx-2">
                             <a onClick={() => navigate('/leaderboard')} className="hover:cursor-pointer hover:underline text-emerald-500">Leaderboard</a>
                         </li>
-                        <li>
-                            <a onClick={handleLogout} className="hover:cursor-pointer hover:underline text-emerald-500">Log out</a>
+                        <li className="mx-2">
+                            {current_user.ok ? <a onClick={handleLogout} className="hover:cursor-pointer hover:underline text-emerald-500">Log out</a> : null}
                         </li>
                     </ul>
                     <img onClick={() => navigate('/profile')} src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" className="h-10 w-10 mr-4 hover:cursor-pointer"/>

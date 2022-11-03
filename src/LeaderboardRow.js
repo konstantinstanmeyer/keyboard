@@ -22,97 +22,91 @@ export default function Leaderboard({ id }){
                     </tr>
                     <tr>
                         <th class="text-emerald-500 bg-sky-800">{id}</th>
-                        <td class="text-emerald-500 bg-sky-800">asdiuphioEWR</td>
+                        <td class="text-emerald-500 bg-sky-800">sadfasdil</td>
                         <td class="bg-sky-800"><span class="italic hover:underline hover:text-emerald-300 hover:cursor-pointer text-emerald-500">view profile</span></td>
                         <td class="text-emerald-500 bg-sky-800">Blue</td>
                     </tr>
                     <tr>
                         <th class="text-emerald-500 bg-sky-800">{id}</th>
-                        <td class="text-emerald-500 bg-sky-800">EWQOURHOIU</td>
+                        <td class="text-emerald-500 bg-sky-800">sadfasdil</td>
                         <td class="bg-sky-800"><span class="italic hover:underline hover:text-emerald-300 hover:cursor-pointer text-emerald-500">view profile</span></td>
                         <td class="text-emerald-500 bg-sky-800">Blue</td>
                     </tr>
                     <tr>
                         <th class="text-emerald-500 bg-sky-800">{id}</th>
-                        <td class="text-emerald-500 bg-sky-800">Cdslfgilir</td>
+                        <td class="text-emerald-500 bg-sky-800">sadfasdil</td>
                         <td class="bg-sky-800"><span class="italic hover:underline hover:text-emerald-300 hover:cursor-pointer text-emerald-500">view profile</span></td>
                         <td class="text-emerald-500 bg-sky-800">Blue</td>
                     </tr>
                     <tr>
                         <th class="text-emerald-500 bg-sky-800">{id}</th>
-                        <td class="text-emerald-500 bg-sky-800">rglihuidfn</td>
+                        <td class="text-emerald-500 bg-sky-800">sadfasdil</td>
                         <td class="bg-sky-800"><span class="italic hover:underline hover:text-emerald-300 hover:cursor-pointer text-emerald-500">view profile</span></td>
                         <td class="text-emerald-500 bg-sky-800">Blue</td>
                     </tr>
                     <tr>
                         <th class="text-emerald-500 bg-sky-800">{id}</th>
-                        <td class="text-emerald-500 bg-sky-800">sdioufhiuash</td>
+                        <td class="text-emerald-500 bg-sky-800">sadfasdil</td>
                         <td class="bg-sky-800"><span class="italic hover:underline hover:text-emerald-300 hover:cursor-pointer text-emerald-500">view profile</span></td>
                         <td class="text-emerald-500 bg-sky-800">Blue</td>
                     </tr>
                     <tr>
                         <th class="text-emerald-500 bg-sky-800">{id}</th>
-                        <td class="text-emerald-500 bg-sky-800">asdkyugasdf</td>
-                        <td class="bg-sky-800"><span class="italic hover:underline hover:text-emerald-300 hover:cursor-pointer text-emerald-500">view profile</span></td>
-                        <td class="text-emerald-500 bg-sky-800">as;oeijlriuhiq</td>
-                    </tr>
-                    <tr>
-                        <th class="text-emerald-500 bg-sky-800">{id}</th>
-                        <td class="text-emerald-500 bg-sky-800">Cy Ganderton</td>
+                        <td class="text-emerald-500 bg-sky-800">sadfasdil</td>
                         <td class="bg-sky-800"><span class="italic hover:underline hover:text-emerald-300 hover:cursor-pointer text-emerald-500">view profile</span></td>
                         <td class="text-emerald-500 bg-sky-800">Blue</td>
                     </tr>
                     <tr>
                         <th class="text-emerald-500 bg-sky-800">{id}</th>
-                        <td class="text-emerald-500 bg-sky-800">Cy Ganderton</td>
+                        <td class="text-emerald-500 bg-sky-800">sadfasdil</td>
                         <td class="bg-sky-800"><span class="italic hover:underline hover:text-emerald-300 hover:cursor-pointer text-emerald-500">view profile</span></td>
                         <td class="text-emerald-500 bg-sky-800">Blue</td>
                     </tr>
                     <tr>
                         <th class="text-emerald-500 bg-sky-800">{id}</th>
-                        <td class="text-emerald-500 bg-sky-800">Cy Ganderton</td>
+                        <td class="text-emerald-500 bg-sky-800">sadfasdil</td>
                         <td class="bg-sky-800"><span class="italic hover:underline hover:text-emerald-300 hover:cursor-pointer text-emerald-500">view profile</span></td>
                         <td class="text-emerald-500 bg-sky-800">Blue</td>
                     </tr>
                     <tr>
                         <th class="text-emerald-500 bg-sky-800">{id}</th>
-                        <td class="text-emerald-500 bg-sky-800">Cy Ganderton</td>
+                        <td class="text-emerald-500 bg-sky-800">sadfasdil</td>
                         <td class="bg-sky-800"><span class="italic hover:underline hover:text-emerald-300 hover:cursor-pointer text-emerald-500">view profile</span></td>
                         <td class="text-emerald-500 bg-sky-800">Blue</td>
                     </tr>
                     <tr>
                         <th class="text-emerald-500 bg-sky-800">{id}</th>
-                        <td class="text-emerald-500 bg-sky-800">Cy Ganderton</td>
+                        <td class="text-emerald-500 bg-sky-800">sadfasdil</td>
                         <td class="bg-sky-800"><span class="italic hover:underline hover:text-emerald-300 hover:cursor-pointer text-emerald-500">view profile</span></td>
                         <td class="text-emerald-500 bg-sky-800">Blue</td>
                     </tr>
                     <tr>
                         <th class="text-emerald-500 bg-sky-800">{id}</th>
-                        <td class="text-emerald-500 bg-sky-800">Cy Ganderton</td>
+                        <td class="text-emerald-500 bg-sky-800">sadfasdil</td>
                         <td class="bg-sky-800"><span class="italic hover:underline hover:text-emerald-300 hover:cursor-pointer text-emerald-500">view profile</span></td>
                         <td class="text-emerald-500 bg-sky-800">Blue</td>
                     </tr>
                     <tr>
                         <th class="text-emerald-500 bg-sky-800">{id}</th>
-                        <td class="text-emerald-500 bg-sky-800">Cy Ganderton</td>
+                        <td class="text-emerald-500 bg-sky-800">sadfasdil</td>
                         <td class="bg-sky-800"><span class="italic hover:underline hover:text-emerald-300 hover:cursor-pointer text-emerald-500">view profile</span></td>
                         <td class="text-emerald-500 bg-sky-800">Blue</td>
                     </tr>
                     <tr>
                         <th class="text-emerald-500 bg-sky-800">{id}</th>
-                        <td class="text-emerald-500 bg-sky-800">Cy Ganderton</td>
+                        <td class="text-emerald-500 bg-sky-800">sadfasdil</td>
                         <td class="bg-sky-800"><span class="italic hover:underline hover:text-emerald-300 hover:cursor-pointer text-emerald-500">view profile</span></td>
                         <td class="text-emerald-500 bg-sky-800">Blue</td>
                     </tr>
                     <tr>
                         <th class="text-emerald-500 bg-sky-800">{id}</th>
-                        <td class="text-emerald-500 bg-sky-800">Cy Ganderton</td>
+                        <td class="text-emerald-500 bg-sky-800">sadfasdil</td>
                         <td class="bg-sky-800"><span class="italic hover:underline hover:text-emerald-300 hover:cursor-pointer text-emerald-500">view profile</span></td>
                         <td class="text-emerald-500 bg-sky-800">Blue</td>
                     </tr>
                     <tr>
                         <th class="text-emerald-500 bg-sky-800">{id}</th>
-                        <td class="text-emerald-500 bg-sky-800">Cy Ganderton</td>
+                        <td class="text-emerald-500 bg-sky-800">sadfasdil</td>
                         <td class="bg-sky-800"><span class="italic hover:underline hover:text-emerald-300 hover:cursor-pointer text-emerald-500">view profile</span></td>
                         <td class="text-emerald-500 bg-sky-800">Blue</td>
                     </tr>
