@@ -5,6 +5,7 @@ import Signin from './Signin';
 import Navbar from './Navbar';
 import Leaderboard from './LeaderboardRow';
 import Profile from './Profile';
+import Signup from './Signup';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({})
@@ -35,6 +36,9 @@ function App() {
           }/>
           <Route path="/signin" element={
             <Signin />
+          }/>
+          <Route path="/signup" element={
+            <Signup />
           }/>
           <Route path="/leaderboard" element={
             <Leaderboard />

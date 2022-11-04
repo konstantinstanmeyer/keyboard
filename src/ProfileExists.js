@@ -10,7 +10,7 @@ export default function ProfileExists({ setProfile }){
                     <div className=" ml-4 flex flex-col h-full w-full">
                         <h3 className="pt-3 text-emerald-500">Username <span className="text-xs">place of origin</span></h3>
                         <p className="text-emerald-500 mt-2">highscore</p>
-                        <button className="bg-emerald-500 text-sky-900 mt-5 rounded-md w-full hover:bg-emerald-300">edit settings</button>
+                        <button onClick={() => setProfile("edit")} className="bg-emerald-500 text-sky-900 mt-5 rounded-md w-full hover:bg-emerald-300">edit settings</button>
                     </div>
                 </div>
             </div>

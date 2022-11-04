@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Form } from 'react-router-dom';
 
 export default function ProfileEdit({ setProfile }){
     const [avatar, setAvatar] = useState()
@@ -25,18 +26,16 @@ export default function ProfileEdit({ setProfile }){
         
     //   }
 
-    function handleSubmit(e){
+    function handleAvatarSubmit(e){
         e.preventDefault();
-        fetch("http://localhost:3000/current_user", {
-        method: "patch",
+        const form = new FormData();
+        form.append("avatar", avatar)
+        fetch("http://localhost:3000/avatar", {
+        method: "post",
         headers: {
             Authorization: localStorage.getItem("token"),
         },
-        body: JSON.stringify({
-
-            avatar: avatar
- 
-        }),
+        body: form,
         })
         .then((res) => {
             if (res.ok) {
@@ -50,16 +49,11 @@ export default function ProfileEdit({ setProfile }){
 
     return(
         <div className="relative w-1/4 mt-14 z-20 rounded-xl mx-auto flex flex-col h-fit bg-sky-900">
-            <div className="flex flex-row items-center relative ml-6 mt-6 mb-6 mr-6">
-                <img className="h-32 w-32" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"/>
-                <div className="h-fit">
-                    <div className=" ml-4 flex flex-col h-full w-full">
-                        <form onSubmit={handleSubmit}>
-                            <input placeholder="hello" className="my-2 w-4/5 placeholder-sky-900 indent-2 rounded-md text-sky-900 bg-emerald-500" />
-                            <button>submit</button>
-                        </form>
-                        <input onChange={(e) => setAvatar(e.target.value)} value={avatar} type="file" name="avatar" className="" />
-                    </div>
+            <div className="flex flex-col justify-center relative ml-6 mt-6 mb-6 mr-6">
+                <img className="h-32 w-32 mx-auto" src="https://cdn-icons-png.flaticon.com/512/5599/5599530.png"/>
+                <div className=" ml-4 flex flex-col h-fit w-full">
+                    <input onClick={() => handleAvatarSubmit} onChange={(e) => setAvatar(e.target.files[0])} type="file" name="avatar" className="" />
+                    <button>submit</button>
                 </div>
             </div>
             <h2 className="text-center text-xl italic text-emerald-500">Preferences:</h2>
