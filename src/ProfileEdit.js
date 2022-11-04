@@ -52,8 +52,8 @@ export default function ProfileEdit({ setProfile }){
             <div className="flex flex-col justify-center relative ml-6 mt-6 mb-6 mr-6">
                 <img className="h-32 w-32 mx-auto" src="https://cdn-icons-png.flaticon.com/512/5599/5599530.png"/>
                 <div className=" ml-4 flex flex-col h-fit w-full">
-                    <input onClick={() => handleAvatarSubmit} onChange={(e) => setAvatar(e.target.files[0])} type="file" name="avatar" className="" />
-                    <button>submit</button>
+                    <input onChange={(e) => setAvatar(e.target.files[0])} type="file" name="avatar" className="" />
+                    <button onClick={() => handleAvatarSubmit}>submit</button>
                 </div>
             </div>
             <h2 className="text-center text-xl italic text-emerald-500">Preferences:</h2>
