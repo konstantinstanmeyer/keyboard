@@ -16,6 +16,7 @@ function App() {
     })
     .then(r => {
       if (r.ok){
+        console.log(r)
         setCurrentUser(r)
         return r.json()
       } else {

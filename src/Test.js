@@ -9,14 +9,30 @@ export default function Test(){
     const [gameState, setGameState] = useState("not started");
     const inputField = document.querySelector("#typeInput");
     const keyDownTimer = useRef(null);
+    const options = document.querySelector('#game-options')
     const [characterIndex, setCharacterIndex] = useState(0)
     const [errors, setErrors] = useState(0)
+    const [textStyle, setTextStyle] = useState("random")
+    const [accuracy, setAccuracy] = useState(0)
+    const [wpm, setWpm] = useState(0)
+    const quote = document.querySelector('#quote')
+    const random = document.querySelector('#random')
+    const yours = document.querySelector('#yours')
     const c = console.log.bind(document)
+
+    useEffect(() => {
+        if (textStyle == "random") {
+            
+        } else if( textStyle == "quote") {
+            
+        } else if(textStyle == "yours"){
+
+        }
+    }, [textStyle])
 
     useEffect(() => {
         const keyDownWait = 3000
         
-        clearTimeout(keyDownTimer.current)
         keyDownTimer.current = setTimeout(() => {
             setBlur(true);
             document.activeElement.blur()
@@ -49,6 +65,8 @@ export default function Test(){
             button.classList.add('bg-sky-900');
             button.classList.add('text-emerald-500');
         })
+
+        return () => clearTimeout(keyDownTimer.current)
     }, [])
 
     function validatedWords(word){
@@ -68,8 +86,18 @@ export default function Test(){
         }
         if (inputValue.length >= 1){
             typing();
+        } else if(inputValue.length == word.length){
+            inputField.disable = "true"
+            setAccuracy(word.length / errors)
         }
     }, [inputValue])
+
+    useEffect(() => {
+        if (gameState === "started") {
+            options.classList.remove("bg-sky-900")
+            options.classList.add("bg-sky-900/40")
+        }
+    }, [gameState])
 
     //code for id'd and iterated word div's/pre p-tag switch
 
@@ -125,6 +153,8 @@ export default function Test(){
         } else if(inputValue[characterIndex] !== characters[characterIndex].innerHTML) {
             setCharacterIndex(characterIndex => characterIndex + 1)
             characters[characterIndex].classList.add('text-red-500')
+            setErrors(errors => errors + 1)
+            //change handling to listen to inputVALUE and be equivalent to the amount of span tags that are red
             c("incorrect")
         } else if (inputValue.length == 0){
             setCharacterIndex(1)
@@ -175,10 +205,46 @@ export default function Test(){
 
     return (
         <div className="items-center h-1/2 relative">
+            <div id="game-options" className="w-[37.5%] bg-sky-900 h-10 mx-auto mt-6 rounded-md flex flex-row items-center">
+                <div className="w-1/2 h-full flex flex-row items-center">
+                    <h2 className="text-emerald-500 text-sm font-bold text-center ml-1 w-1/4">words</h2>
+                    <p className="text-emerald-500/40 hover:text-emerald-500/100 hover:cursor-pointer text-sm font-bold text-center w-1/4">15</p>
+                    <p className="text-emerald-500/40 hover:text-emerald-500/100 hover:cursor-pointer text-sm font-bold text-center w-1/4">25</p>
+                    <p className="text-emerald-500/40 hover:text-emerald-500/100 hover:cursor-pointer text-sm font-bold text-center w-1/4">50</p>
+                </div>
+                <div className="w-[2px] h-[60%] bg-emerald-500"></div>
+                <div className="w-1/2 h-full flex flex-row items-center">
+                    <h2 id="random" className="text-emerald-500/40 hover:text-emerald-500/100 hover:cursor-pointer ml-2 text-sm font-bold text-center w-1/3">random</h2>
+                    <p id="quote" className="text-emerald-500/40 hover:text-emerald-500/100 hover:cursor-pointer text-sm font-bold text-center w-1/3">quote</p>
+                    <div className="dropdown dropdown-right m-0 p-0 h-fit ml-2">
+                    <label tabIndex={0} className="btn text-emerald-500/40 no-animation bg-transparent text-sm hover:bg-emerald-300 border-none m-0 p-0 hover:text-emerald-500/100 hover:bg-transparent lowercase">yours</label>
+                    <ul tabIndex={0} className="dropdown-content menu p-2 shadow rounded-box w-52 bg-sky-800">
+                        <li className="bg-emerald-500 border-b-[4px] border-sky-800 text-sky-900"><a>option 1</a></li>
+                        <li className="bg-emerald-500 text-sky-900"><a>option 2</a></li>
+                    </ul>
+                </div>
+                </div>
+            </div>
+            <div className="w-2/5 h-10 mx-auto mt-6 rounded-md items-center flex flex-row">
+                <div className="flex flex-col justify-center w-1/3 h-full">
+                    <h2 className="mx-auto font-bold">ERRORS</h2>
+                    <h1 className="mx-auto font-bold">{errors}</h1>
+                </div>
+                <div className="w-[2px] h-[70%] bg-sky-900"></div>
+                <div className="flex flex-col justify-center w-1/3 h-full">
+                    <h2 className="mx-auto font-bold">WPM</h2>
+                    <h1 className="mx-auto font-bold">{wpm}</h1>
+                </div>
+                <div className="w-[2px] h-[70%] bg-sky-900"></div>
+                <div className="flex flex-col justify-center w-1/3 h-full">
+                    <h2 className="mx-auto font-bold">ACCURACY</h2>
+                    <h1 className="mx-auto font-bold">{accuracy}%</h1>
+                </div>
+            </div>
             <div id="test-page" className="w-1/3 mx-auto relative">
                 <input id="typeInput" autoComplete="off" autoFocus className="opacity-0 absolute" onFocus={() => setBlur(false)} value={inputValue} onChange={(e) => setInputValue(e.target.value)}/>
                 <div className="relative flex flex-col justify-center mb-10">
-                    <div id="test-zone" className={`h-fit justify-center flex mt-16 my-5 py-1 bg-emerald-600 rounded-lg ${blur ? 'blur-sm transition duration-300' : null} relative`} onClick={() => inputField.focus()}>
+                    <div id="test-zone" className={`h-fit justify-center flex mt-8 my-5 py-1 bg-emerald-600 rounded-lg ${blur ? 'blur-sm transition duration-300' : null} relative`} onClick={() => inputField.focus()}>
                         <div id="text-area" className="flex break-words z-0">
                             <p id="word-zone" className="text-center select-none">{validatedWords(word)}</p>
                         </div>

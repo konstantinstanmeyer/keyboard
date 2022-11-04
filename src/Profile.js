@@ -4,7 +4,7 @@ import ProfileExists from './ProfileExists';
 import ProfileSettings from './ProfileSettings';
 
 export default function Profile({ current_user }){
-    const [profile, setProfile] = useState("edit")
+    const [profile, setProfile] = useState("normal")
 
     if (profile == "normal"){
         return <ProfileExists setProfile={setProfile} />
