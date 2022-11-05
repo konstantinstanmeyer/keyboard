@@ -1,13 +1,12 @@
 import React, { useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function Signin(){
+export default function Signin({ setCurrentUser }){
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [closed, setClosed] = useState(true)
     const [startedTyping, setStartedTyping] = useState(false)
     const navigate = useNavigate();
-    const submitButton = document.querySelectorAll("#submit-button")
     const emailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
 
 //       fetch("http://localhost:3000/signup", {
@@ -58,9 +57,21 @@ export default function Signin(){
         .then((res) => {
             if (res.ok) {
             console.log(res);
-            localStorage.setItem("token", res.headers.get("Authorization"));
-            return res.json();
-            } else {
+            localStorage.setItem("token", res.headers.get("Authorization"))
+            .then(fetch("http://localhost:3000/current_user", {
+                headers: {
+                Authorization: localStorage.getItem("token")
+            }
+            })
+            .then(r => {
+                if (r.ok){
+                    console.log(r)
+                    setCurrentUser(r)
+                    navigate('/profile')
+                } else {
+                    console.log(r)
+                }
+            }))} else {
             throw new Error(res);
             }
         })

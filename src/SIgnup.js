@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Signup(){
@@ -11,35 +11,45 @@ export default function Signup(){
 
     function handleSubmit(e){
         e.preventDefault();
-        fetch("http://localhost:3000/signup", {
-        method: "post",
-        headers: {
-        "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-        user: {
-            email: "test5@test.com",
-            password: "password",
-        },
-        }),
-        })
-        .then((res) => {
-        if (res.ok) {
-            console.log(res.headers.get("Authorization"));
-            localStorage.setItem("token", res.headers.get("Authorization"));
-            return res.json();
+        if(emailRegex.test(email)){
+            fetch("http://localhost:3000/signup", {
+            method: "post",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+            user: {
+                email: email,
+                password: password,
+            },
+            }),
+            })
+            .then((res) => {
+            if (res.ok) {
+                console.log(res.headers.get("Authorization"));
+                localStorage.setItem("token", res.headers.get("Authorization"));
+                return res.json();
+            } else {
+                throw new Error(res);
+            }
+            })
+            .then((json) => console.dir(json))
+            .catch((err) => console.error(err))
         } else {
-            throw new Error(res);
+            alert("Please enter a valid email")
         }
-        })
-        .then((json) => console.dir(json))
-        .catch((err) => console.error(err));
     }
+
+    useEffect(() => {
+        if (startedTyping == false && email.length > 0){
+            setStartedTyping(true);
+        }
+    }, [email])
 
     return (
         <div className="h-fit w-1/4 bg-sky-900 mx-auto rounded-md relative mt-14">
             <div className="py-10">
-                <img className="h-24 w-24 m-auto mb-5" src="https://cdn-icons-png.flaticon.com/512/2648/2648647.png"/>
+                <img className="h-24 w-24 m-auto mb-5" src="https://cdn-icons-png.flaticon.com/512/4116/4116368.png"/>
                 <h5 className="text-emerald-500 text-center text-xl pb-5 mx-5"><strong>Sign up</strong></h5>
                 <form onSubmit={handleSubmit} className="relative flex flex-col justify-center">
                     <div className="relative flex justify-center pb-3">

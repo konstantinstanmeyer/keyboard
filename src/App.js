@@ -6,9 +6,11 @@ import Navbar from './Navbar';
 import Leaderboard from './LeaderboardRow';
 import Profile from './Profile';
 import Signup from './Signup';
+import Info from './Info';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({})
+  
   useEffect(()=> {
     fetch("http://localhost:3000/current_user", {
       headers: {
@@ -35,7 +37,7 @@ function App() {
             <Test />
           }/>
           <Route path="/signin" element={
-            <Signin />
+            <Signin setCurrentUser={setCurrentUser} />
           }/>
           <Route path="/signup" element={
             <Signup />
@@ -45,6 +47,9 @@ function App() {
           }/>
           <Route path="/profile" element={
             <Profile />
+          }/>
+          <Route path="/info" element={
+            <Info />
           }/>
         </Routes>
       </Router>

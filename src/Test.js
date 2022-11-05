@@ -12,12 +12,14 @@ export default function Test(){
     const options = document.querySelector('#game-options')
     const [characterIndex, setCharacterIndex] = useState(0)
     const [errors, setErrors] = useState(0)
+    const [timeLeft, setTimeLeft] = useState(60)
     const [textStyle, setTextStyle] = useState("random")
     const [accuracy, setAccuracy] = useState(0)
     const [wpm, setWpm] = useState(0)
     const quote = document.querySelector('#quote')
     const random = document.querySelector('#random')
     const yours = document.querySelector('#yours')
+    let textTimer;
     const c = console.log.bind(document)
 
     useEffect(() => {
@@ -77,7 +79,6 @@ export default function Test(){
         return lettersArray;
     }
 
-
     useEffect(() => {
         if(gameState === "not started" && inputValue !== "") {
             setGameState("started")
@@ -88,14 +89,38 @@ export default function Test(){
             typing();
         } else if(inputValue.length == word.length){
             inputField.disable = "true"
-            setAccuracy(word.length / errors)
+        }
+
+        if(inputValue.length >= 1){
+            setErrors(errors => getErrors(errors))
         }
     }, [inputValue])
+
+    function timer(){
+        if(timeLeft > 0){
+            setTimeLeft(timeLeft => timeLeft - 1)
+        } else {
+            clearInterval(textTimer);
+            console.log("no")
+        }
+    }
+
+    function getErrors(){
+        let errors = 0;
+        let spans = document.querySelectorAll('span')
+        spans.forEach((span) => {
+            if (span.classList.contains('text-red-500')){
+                errors++;
+            }
+        })
+        return errors;
+    }
 
     useEffect(() => {
         if (gameState === "started") {
             options.classList.remove("bg-sky-900")
             options.classList.add("bg-sky-900/40")
+            textTimer = setInterval(timer(), 1000)
         }
     }, [gameState])
 
@@ -148,12 +173,13 @@ export default function Test(){
             c("correct")
         } else if (inputValue[characterIndex] === undefined ){
             let characterValue = characterIndex - 1
-            characters[characterValue].classList.remove('text-green-500', 'text-red-500')
+            characters[characterValue].classList.remove('text-green-500', 'text-red-500', 'underline')
             setCharacterIndex(characterIndex => characterIndex - 1)
         } else if(inputValue[characterIndex] !== characters[characterIndex].innerHTML) {
             setCharacterIndex(characterIndex => characterIndex + 1)
             characters[characterIndex].classList.add('text-red-500')
-            setErrors(errors => errors + 1)
+            characters[characterIndex].classList.add('underline')
+            // setErrors(errors => errors + 1)
             //change handling to listen to inputVALUE and be equivalent to the amount of span tags that are red
             c("incorrect")
         } else if (inputValue.length == 0){
@@ -207,14 +233,14 @@ export default function Test(){
         <div className="items-center h-1/2 relative">
             <div id="game-options" className="w-[37.5%] bg-sky-900 h-10 mx-auto mt-6 rounded-md flex flex-row items-center">
                 <div className="w-1/2 h-full flex flex-row items-center">
-                    <h2 className="text-emerald-500 text-sm font-bold text-center ml-1 w-1/4">words</h2>
+                    <h2 className="text-emerald-500 text-sm font-bold text-center ml-1 w-1/4 select-none">words</h2>
                     <p className="text-emerald-500/40 hover:text-emerald-500/100 hover:cursor-pointer text-sm font-bold text-center w-1/4">15</p>
                     <p className="text-emerald-500/40 hover:text-emerald-500/100 hover:cursor-pointer text-sm font-bold text-center w-1/4">25</p>
                     <p className="text-emerald-500/40 hover:text-emerald-500/100 hover:cursor-pointer text-sm font-bold text-center w-1/4">50</p>
                 </div>
                 <div className="w-[2px] h-[60%] bg-emerald-500"></div>
                 <div className="w-1/2 h-full flex flex-row items-center">
-                    <h2 id="random" className="text-emerald-500/40 hover:text-emerald-500/100 hover:cursor-pointer ml-2 text-sm font-bold text-center w-1/3">random</h2>
+                    <h2 onClick={() => setTextStyle("random")} id="random" className="text-emerald-500/40 hover:text-emerald-500/100 hover:cursor-pointer ml-2 text-sm font-bold text-center w-1/3">random</h2>
                     <p id="quote" className="text-emerald-500/40 hover:text-emerald-500/100 hover:cursor-pointer text-sm font-bold text-center w-1/3">quote</p>
                     <div className="dropdown dropdown-right m-0 p-0 h-fit ml-2">
                     <label tabIndex={0} className="btn text-emerald-500/40 no-animation bg-transparent text-sm hover:bg-emerald-300 border-none m-0 p-0 hover:text-emerald-500/100 hover:bg-transparent lowercase">yours</label>
@@ -227,18 +253,18 @@ export default function Test(){
             </div>
             <div className="w-2/5 h-10 mx-auto mt-6 rounded-md items-center flex flex-row">
                 <div className="flex flex-col justify-center w-1/3 h-full">
-                    <h2 className="mx-auto font-bold">ERRORS</h2>
-                    <h1 className="mx-auto font-bold">{errors}</h1>
+                    <h2 className="mx-auto text-sky-900/70 font-bold select-none">ERRORS</h2>
+                    <h1 className="mx-auto text-sky-900/70 font-bold select-none">{errors}</h1>
                 </div>
                 <div className="w-[2px] h-[70%] bg-sky-900"></div>
                 <div className="flex flex-col justify-center w-1/3 h-full">
-                    <h2 className="mx-auto font-bold">WPM</h2>
-                    <h1 className="mx-auto font-bold">{wpm}</h1>
+                    <h2 className="mx-auto text-sky-900/70 font-bold select-none">TIME REMAINING</h2>
+                    <h1 className="mx-auto text-sky-900/70 font-bold select-none">{timeLeft}</h1>
                 </div>
                 <div className="w-[2px] h-[70%] bg-sky-900"></div>
                 <div className="flex flex-col justify-center w-1/3 h-full">
-                    <h2 className="mx-auto font-bold">ACCURACY</h2>
-                    <h1 className="mx-auto font-bold">{accuracy}%</h1>
+                    <h2 className="mx-auto text-sky-900/70 font-bold select-none">WPM</h2>
+                    <h1 className="mx-auto text-sky-900/70 font-bold select-none">{wpm}</h1>
                 </div>
             </div>
             <div id="test-page" className="w-1/3 mx-auto relative">

@@ -4,8 +4,6 @@ import { useNavigate } from 'react-router-dom';
 export default function Navbar({ current_user }){
     const navigate = useNavigate();
 
-    function refreshPage() { window. location. reload(false); }
-
     function handleLogout(){
         let token = localStorage.getItem('token')
         fetch(`http://localhost:3000/logout`,{
@@ -32,7 +30,7 @@ export default function Navbar({ current_user }){
                     <a onClick={() => navigate('/')} className="hover:cursor-pointer hover:underline text-emerald-500">Play</a>
                 </li>
                 <li className="mx-2 list-none">
-                    <a className="hover:cursor-pointer hover:underline text-emerald-500">Blog</a>
+                    <a onClick={() => navigate('info')} className="hover:cursor-pointer hover:underline text-emerald-500">Info</a>
                 </li>
                 <div className="ml-auto flex flex-row items-center">
                     <ul className="list-none p-0 flex flex-row mr-2">
