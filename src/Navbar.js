@@ -44,7 +44,7 @@ export default function Navbar({ current_user }){
                             {current_user.ok ? <a onClick={handleLogout} className="hover:cursor-pointer hover:underline text-emerald-500">Log out</a> : null}
                         </li>
                     </ul>
-                    {window.location.href.slice(-7) == 'profile' && !current_user.response ? null : <img onClick={() => navigate('/profile')} src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" className="h-10 w-10 mr-4 hover:cursor-pointer"/>}
+                    {window.location.href.slice(-7) == 'profile' && !current_user.response ? null : <img onClick={() => navigate('/profile')} src={current_user.ok ? "https://cdn-icons-png.flaticon.com/512/3135/3135715.png" : "https://cdn-icons-png.flaticon.com/512/2458/2458293.png"} className="h-10 w-10 mr-4 hover:cursor-pointer"/>}
                 </div>
             </div>
         </div>

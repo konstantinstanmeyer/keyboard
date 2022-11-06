@@ -75,8 +75,6 @@ export default function Signin({ setCurrentUser }){
             throw new Error(res);
             }
         })
-        .then((json) => console.dir(json))
-        .then(navigate('/'))
         .catch((err) => console.error(err));
     }
 

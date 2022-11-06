@@ -13,7 +13,9 @@ export default function Test(){
     const [characterIndex, setCharacterIndex] = useState(0)
     const [errors, setErrors] = useState(0)
     const [timeLeft, setTimeLeft] = useState(60)
+    const [timeStarted, setTimeStarted] = useState(60)
     const [textStyle, setTextStyle] = useState("random")
+    const [displayResult, setDisplayResult] = useState(false)
     const [accuracy, setAccuracy] = useState(0)
     const [wpm, setWpm] = useState(0)
     const quote = document.querySelector('#quote')
@@ -87,8 +89,6 @@ export default function Test(){
         }
         if (inputValue.length >= 1){
             typing();
-        } else if(inputValue.length == word.length){
-            inputField.disable = "true"
         }
 
         if(inputValue.length >= 1){
@@ -123,6 +123,13 @@ export default function Test(){
             textTimer = setInterval(timer(), 1000)
         }
     }, [gameState])
+
+    useEffect(() => {
+        if (gameState === "started" && characterIndex == word.length) {
+            inputField.disabled = true
+            setDisplayResult(true)
+        }
+    }, [characterIndex])
 
     //code for id'd and iterated word div's/pre p-tag switch
 
@@ -267,8 +274,28 @@ export default function Test(){
                     <h1 className="mx-auto text-sky-900/70 font-bold select-none">{wpm}</h1>
                 </div>
             </div>
-            <div id="test-page" className="w-1/3 mx-auto relative">
+            <div id="test-page" className="w-1/3 mx-auto">
                 <input id="typeInput" autoComplete="off" autoFocus className="opacity-0 absolute" onFocus={() => setBlur(false)} value={inputValue} onChange={(e) => setInputValue(e.target.value)}/>
+                {displayResult ? <div className="absolute justify-center items-center flex z-50 -top-40 left-0 w-screen h-screen bg-black/50">
+                    <div className="w-1/3 h-1/3 bg-emerald-500 rounded-lg flex flex-col relative">
+                        <div className="w-full flex flex-col mt-3 items-center py-4 h-[37%]">
+                            <p className="w-full text-center text-2xl font-bold pt-1 text-sky-900">GAME SUMMARY: <span className="text-lg">{timeStarted - timeLeft}s elapsed</span></p>
+                            <p className="text-sky-900"><strong>game-mode: </strong>{textStyle}</p>
+                        </div>
+                        <div className="w-full flex flex-row h-[15%] items-center pb-5">
+                            <p className="w-1/3 text-xl text-center text-sky-900 font-bold underline underline-offset-8">errors</p>
+                            <p className="w-1/3 text-xl text-center text-sky-900 font-bold underline underline-offset-8">wpm</p>
+                            <p className="w-1/3 text-xl text-center text-sky-900 font-bold underline underline-offset-8">accuracy</p>
+                        </div>
+                        <div className="w-full flex flex-row h-[25%]">
+                            <p className="w-1/3 text-5xl font-bold text-sky-900 text-center">{errors}</p>
+                            <p className="w-1/3 text-5xl font-bold text-sky-900 text-center">{wpm}</p>
+                            <p className="w-1/3 text-5xl font-bold text-sky-900 text-center">{accuracy}%</p>
+                        </div>
+                        <p className="w-full text-center font-bold mb-3 text-sky-900">great job!</p>
+                        <button onClick={() => setDisplayResult(false)} className="absolute right-3 top-[0.3rem] text-4xl rotate-45 text-sky-900">+</button>
+                    </div>
+                </div> : null}
                 <div className="relative flex flex-col justify-center mb-10">
                     <div id="test-zone" className={`h-fit justify-center flex mt-8 my-5 py-1 bg-emerald-600 rounded-lg ${blur ? 'blur-sm transition duration-300' : null} relative`} onClick={() => inputField.focus()}>
                         <div id="text-area" className="flex break-words z-0">
