@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form } from 'react-router-dom';
 
-export default function ProfileEdit({ setProfile }){
+export default function ProfileEdit({ setProfile, current_user }){
     const [avatar, setAvatar] = useState()
 
     console.log(avatar)
@@ -50,7 +50,7 @@ export default function ProfileEdit({ setProfile }){
     return(
         <div className="relative w-1/4 mt-14 z-20 rounded-xl mx-auto flex flex-col h-fit bg-sky-900">
             <div className="flex flex-col justify-center relative ml-6 mt-6 mb-6 mr-6">
-                <img className="h-32 w-32 mx-auto" src="https://cdn-icons-png.flaticon.com/512/5599/5599530.png"/>
+                <img className="h-32 w-32 mx-auto" src={current_user.ok ? "https://cdn-icons-png.flaticon.com/512/3135/3135715.png" : "https://cdn-icons-png.flaticon.com/512/2458/2458293.png"}/>
                 <div className=" ml-4 flex flex-col h-fit w-full">
                     <input onChange={(e) => setAvatar(e.target.files[0])} type="file" name="avatar" className="" />
                     <button onClick={() => handleAvatarSubmit}>submit</button>

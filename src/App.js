@@ -12,7 +12,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState({})
   
   useEffect(()=> {
-    fetch("http://localhost:3000/current_user", {
+    fetch("http://localhost:3000/users/current", {
       headers: {
         Authorization: localStorage.getItem("token")
       }
@@ -46,7 +46,7 @@ function App() {
             <Leaderboard />
           }/>
           <Route path="/profile" element={
-            <Profile />
+            <Profile current_user={currentUser} />
           }/>
           <Route path="/info" element={
             <Info />
