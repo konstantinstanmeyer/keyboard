@@ -104,6 +104,7 @@ export default function Test({ current_user }){
             countup = setInterval(() => {
                 setTimeElapsed(seconds => seconds + 1)
             }, 1000)
+            clearTimeout(keyDownTimer.current)
         }
 
         if (characterIndex == word.length && current_user.hasOwnProperty('email') && gameState === "finished"){
@@ -167,21 +168,22 @@ export default function Test({ current_user }){
     function submitScore(){
         console.log({
             score: wpm,
-                accuracy: accuracy,
-                style: textStyle,
-                user_id: current_user.id
+            accuracy: accuracy,
+            style: textStyle,
+            user_id: current_user.id
         })
 
         fetch('http://localhost:3000/scores', {
             method: 'POST',
             headers: {
-                Authorization: localStorage.getItem("token")
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 score: wpm,
                 accuracy: accuracy,
                 style: textStyle,
-                user_id: current_user.id
+                user_id: current_user.id,
+                word_length: wordCount
             })
         })
         .then(r => r.json())
