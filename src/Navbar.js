@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function Navbar({ current_user }){
+export default function Navbar({ current_user ,setCurrentUser }){
     const navigate = useNavigate();
 
     function handleLogout(){
@@ -15,6 +15,7 @@ export default function Navbar({ current_user }){
         .then(r => {
             if(r.ok){
                 localStorage.removeItem('token');
+                setCurrentUser({})
                 navigate('/');
             } else {
                 throw new Error(r.status)
@@ -35,16 +36,16 @@ export default function Navbar({ current_user }){
                 <div className="ml-auto flex flex-row items-center">
                     <ul className="list-none p-0 flex flex-row mr-2">
                         <li className="mx-2">
-                            {current_user.ok ? null : <a onClick={() => navigate('/signin')} className="hover:cursor-pointer hover:underline text-emerald-500">Sign In</a>}
+                            {current_user.hasOwnProperty('email') ? null : <a onClick={() => navigate('/signin')} className="hover:cursor-pointer hover:underline text-emerald-500">Sign In</a>}
                         </li>
                         <li className="ml-2">
                             <a onClick={() => navigate('/leaderboard')} className="hover:cursor-pointer hover:underline text-emerald-500">Leaderboard</a>
                         </li>
                         <li className="mx-2">
-                            {current_user.ok ? <a onClick={handleLogout} className="hover:cursor-pointer hover:underline text-emerald-500">Log out</a> : null}
+                            {current_user.hasOwnProperty('email') ? <a onClick={handleLogout} className="hover:cursor-pointer hover:underline text-emerald-500">Log out</a> : null}
                         </li>
                     </ul>
-                    {window.location.href.slice(-7) == 'profile' && !current_user.response ? null : <img onClick={() => navigate('/profile')} src={current_user.ok ? "https://cdn-icons-png.flaticon.com/512/3135/3135715.png" : "https://cdn-icons-png.flaticon.com/512/2458/2458293.png"} className="h-10 w-10 mr-4 hover:cursor-pointer"/>}
+                    {window.location.href.slice(-7) == 'profile' || window.location.href.slice(-12) == 'profile/edit' || !current_user.hasOwnProperty('avatar_url') ? null : <img onClick={() => navigate('/profile')} src={current_user.avatar_url === null || !current_user.hasOwnProperty('avatar_url') ? "https://cdn-icons-png.flaticon.com/512/8377/8377360.png" : current_user.avatar_url} className="h-10 w-10 mr-4 hover:cursor-pointer"/>}
                 </div>
             </div>
         </div>

@@ -34,10 +34,10 @@ export default function Signin({ setCurrentUser }){
 //   .catch((err) => console.error(err));
 
     useEffect(() => {
-        if (startedTyping == false && email.length > 0){
+        if (startedTyping === false && email.length > 0){
             setStartedTyping(true);
         }
-    }, [email])
+    }, [email, startedTyping])
 
     function handleSubmit(e){
         e.preventDefault();
@@ -58,30 +58,28 @@ export default function Signin({ setCurrentUser }){
             if (res.ok) {
             console.log(res);
             localStorage.setItem("token", res.headers.get("Authorization"))
-            .then(fetch("http://localhost:3000/current_user", {
+        }})
+        .then(r => r.json())
+        .then( data => setCurrentUser(data))
+        .then(fetch('http://localhost:3000/users/current', {
                 headers: {
-                Authorization: localStorage.getItem("token")
-            }
-            })
-            .then(r => {
-                if (r.ok){
-                    console.log(r)
-                    setCurrentUser(r)
-                    navigate('/profile')
-                } else {
-                    console.log(r)
+                    Authorization: localStorage.getItem("token")
                 }
-            }))} else {
-            throw new Error(res);
-            }
-        })
-        .catch((err) => console.error(err));
+                })
+                .then(r => r.json())
+                .then(r => {
+                    if (r.hasOwnProperty('email')){
+                        setCurrentUser(r)
+                        console.log(r)
+                    }
+                })
+        )
     }
 
     return(
         <div className="h-fit w-1/4 bg-sky-900 mx-auto rounded-md relative mt-14">
             <div className="py-10">
-            <img className="h-24 w-24 m-auto mb-5" src="https://cdn-icons-png.flaticon.com/512/2648/2648647.png"/>
+            <img className="h-24 w-24 m-auto mb-5" alt="signin" src="https://cdn-icons-png.flaticon.com/512/2648/2648647.png"/>
             <h5 className="text-emerald-500 text-center text-xl pb-5 mx-5"><strong>Enter Valid Login Credentials:</strong></h5>
             <form onSubmit={handleSubmit} className="relative flex flex-col justify-center">
                 <div className="relative flex justify-center pb-3">
@@ -91,7 +89,7 @@ export default function Signin({ setCurrentUser }){
                 {!emailRegex.test(email) && startedTyping ? <p className="text-sm absolute -top-4 text-red-500 p-0 m-0">*please enter a valid email*</p> : null}
                 </div>
                 <input className="h-10 w-2/3 border-4 border-emerald-500 text-sky-900 rounded-md m-auto indent-3 py-5 my-2 placeholder-sky-900 bg-emerald-500" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password..." type={closed ? "password" : "text"}/>
-                <img onClick={() => setClosed(!closed)} className="h-6 w-6 relative ml-auto -top-11 right-[20%]" src={closed ? "https://cdn-icons-png.flaticon.com/512/2356/2356734.png" : "https://cdn-icons-png.flaticon.com/512/709/709612.png"}/>
+                <img alt="eyes" onClick={() => setClosed(!closed)} className="h-6 w-6 relative ml-auto -top-11 right-[20%]" src={closed ? "https://cdn-icons-png.flaticon.com/512/2356/2356734.png" : "https://cdn-icons-png.flaticon.com/512/709/709612.png"}/>
                 <button id="submit-button" className="rounded-md h-20 w-2/3 bg-emerald-500 m-auto text-2xl text-sky-900">Sign In</button>
             </form>
             <p onClick={() => navigate('/signup')} className="text-center text-emerald-500 mt-1 hover:cursor-pointer">Don't have an account? <i>Sign up!</i></p>
@@ -99,5 +97,3 @@ export default function Signin({ setCurrentUser }){
         </div>
     )
 }
-
-{/* <kbd id="q" className="kbd text-3xl text-teal-500 border-0 bg-sky-900">q</kbd> */}

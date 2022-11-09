@@ -1,16 +1,47 @@
 import React, { useEffect, useState } from 'react';
 
-export default function Leaderboard({ id }){
+export default function Leaderboard(){
     const [users, setUsers] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
+        setIsLoading(true)
         fetch('http://localhost:3000/users')
         .then(response => response.json())
         .then(data => {
             setUsers(data)
             console.log(data)
+            setIsLoading(false)
         })
     }, [])
+
+    function makeRows(users){
+        users.map((user, i) => {
+            return (
+                <tr>
+                    <td className="bg-sky-800 w-1/4">
+                        <div className="flex items-center space-x-3">
+                            <div className="items-center flex flex-row avatar pr-0 ml-2">
+                                <p className="w-3 text-lg font-bold text-emerald-500">{i + 1}</p>
+                                <div className="ml-12 rounded-full mask w-12 h-12 border-2 border-emerald-500">
+                                    <img className="" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar Tailwind CSS Component" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td className="bg-sky-800 w-1/4 text-emerald-500 font-bold">
+                        <span className="">{user.email}</span>
+                    </td>
+                    <td className="bg-sky-800 w-1/4 text-emerald-500 text-md italic">
+                        <span className="hover:underline hover:cursor-pointer">view profile</span>
+                    </td>
+                    <th className="bg-sky-800 w-1/4 text-emerald-500">
+                        <span className="">{user.high_score}</span>
+                    </th>
+                </tr>
+            )})}
+    
+    console.log(isLoading)
 
     return(
         <div class="flex relative justify-center h-3/5 rounded-b-lg">
@@ -24,9 +55,15 @@ export default function Leaderboard({ id }){
                             <th class="text-emerald-500 bg-sky-900 text-lg">Highscore</th>
                         </tr>
                     </thead>
-                    <tbody class="overflow-y-scroll">
-                        {users.map((user, i) => {
-                            return(
+                    <tbody class="overflow-y-scroll h-full bg-sky-800">
+                        {isLoading ?  
+                        <tr>
+                        <td className="w-1/4 h-full bg-sky-800"></td>
+                        <td className="w-1/4 h-full bg-sky-800"></td>
+                        <td className="w-1/4 h-full bg-sky-800"></td>
+                        <td className="w-1/4 h-full bg-sky-800"></td>
+                        </tr>: users.map((user, i) => {
+                            return (
                                 <tr>
                                     <td className="bg-sky-800 w-1/4">
                                         <div className="flex items-center space-x-3">
@@ -48,8 +85,7 @@ export default function Leaderboard({ id }){
                                         <span className="">{user.high_score}</span>
                                     </th>
                                 </tr>
-                            )
-                        })}
+                            )})}
                     </tbody>
                 </table>
             </div>

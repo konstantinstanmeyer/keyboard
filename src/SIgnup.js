@@ -28,6 +28,7 @@ export default function Signup(){
             if (res.ok) {
                 console.log(res.headers.get("Authorization"));
                 localStorage.setItem("token", res.headers.get("Authorization"));
+                navigate('/signin')
                 return res.json();
             } else {
                 throw new Error(res);

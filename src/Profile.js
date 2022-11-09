@@ -7,6 +7,7 @@ import ProfileGuest from './ProfileGuest';
 export default function Profile({ current_user }){
     const [profile, setProfile] = useState("")
     const [user, setUser] = useState({})
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         fetch('http://localhost:3000/users/current', {
@@ -15,27 +16,21 @@ export default function Profile({ current_user }){
         }
         })
         .then(r => r.json())
-        .then(data => {
-            setUser(data)
+        .then(r => {
+            if (r.hasOwnProperty('email')){
+                setUser(r)
+                setProfile("normal")
+                console.log(r)
+            } else {
+                setProfile("guest")
+            }
         })
     }, [])
 
     console.log(user)
 
-    useEffect(() => {
-        if (current_user){
-            setProfile("normal")
-        } else {
-            setProfile("guest")
-        }
-    }, [])
-
     if (profile == "normal"){
         return <ProfileExists current_user={user} setProfile={setProfile} />
-    } else if (profile == "edit"){
-        return <ProfileEdit current_user={user} setProfile={setProfile} />
-    } else if (profile == "settings"){
-        return <ProfileSettings current_user={user} setProfile={setProfile} />
     } else if (profile == "guest"){
         return <ProfileGuest current_user={user} setProfile={setProfile} />
     }

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Form } from 'react-router-dom';
 
-export default function ProfileEdit({ setProfile, current_user }){
+export default function ProfileEdit({ current_user }){
     const [avatar, setAvatar] = useState()
-
-    console.log(avatar)
+    const [origin, setOrigin] = useState(false)
+    const [viewScore, setViewScore] = useState(false)
+    const [viewProfile, setViewProfile] = useState(false)
 
     // function onSubmit(e){
     //     e.preventDefault()
@@ -50,7 +51,7 @@ export default function ProfileEdit({ setProfile, current_user }){
     return(
         <div className="relative w-1/4 mt-14 z-20 rounded-xl mx-auto flex flex-col h-fit bg-sky-900">
             <div className="flex flex-col justify-center relative ml-6 mt-6 mb-6 mr-6">
-                <img className="h-32 w-32 mx-auto" src={current_user.ok ? "https://cdn-icons-png.flaticon.com/512/3135/3135715.png" : "https://cdn-icons-png.flaticon.com/512/2458/2458293.png"}/>
+                <img className="h-32 w-32 mx-auto" src={current_user.avatar_url ? current_user.avatar_url : "https://cdn-icons-png.flaticon.com/512/2458/2458293.png"}/>
                 <div className=" ml-4 flex flex-col h-fit w-full">
                     <input onChange={(e) => setAvatar(e.target.files[0])} type="file" name="avatar" className="" />
                     <button onClick={() => handleAvatarSubmit}>submit</button>
@@ -76,8 +77,8 @@ export default function ProfileEdit({ setProfile, current_user }){
                 </div>
             </div>
             <div className="w-1/2 mx-auto">
-                <div className="dropdown dropdown-right mt-3 mb-6">
-                    <label tabIndex={0} className="btn no-animation m-1 bg-emerald-500 text-sky-900 hover:bg-emerald-300">who can view your profile</label>
+                <div className="dropdown dropdown-right mt-3 mb-6 w-full">
+                    <label tabIndex={0} className="btn w-full no-animation m-1 bg-emerald-500 text-sky-900 hover:bg-emerald-300">origin private</label>
                     <ul tabIndex={0} className="dropdown-content menu p-2 shadow rounded-box w-52 bg-sky-800">
                         <li className="bg-emerald-500 border-b-[4px] border-sky-800 text-sky-900"><a>everyone</a></li>
                         <li className="bg-emerald-500 text-sky-900"><a>no one</a></li>

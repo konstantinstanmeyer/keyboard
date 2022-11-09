@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import Keyboard from "./Keyboard";
 
-export default function Test(){
+export default function Test({ current_user }){
     const word = "program system public early can increase restaurant performance consider people planet interest head govern general possible who point write plant state develop"
     const [blur, setBlur] = useState(false);
     const [inputValue, setInputValue] = useState("");
@@ -12,14 +12,13 @@ export default function Test(){
     const options = document.querySelector('#game-options')
     const [characterIndex, setCharacterIndex] = useState(0)
     const [errors, setErrors] = useState(0)
-    const [timeLeft, setTimeLeft] = useState(60)
-    const [timeStarted, setTimeStarted] = useState(60)
+    const [timeElapsed, setTimeElapsed] = useState(0)
     const [textStyle, setTextStyle] = useState("random")
     const [displayResult, setDisplayResult] = useState(false)
     const [accuracy, setAccuracy] = useState(0)
-    const [wordCount, setWordCount] = useState(15)
+    const [wordCount, setWordCount] = useState(25)
     const [isLoading, setIsLoading] = useState(false)
-    const [wpm, setWpm] = useState(0)
+    const [wpm, setWpm] = useState("...")
     const quote = document.querySelector('#quote')
     const random = document.querySelector('#random')
     const yours = document.querySelector('#yours')
@@ -49,7 +48,6 @@ export default function Test(){
             let focus = document.querySelector("#typeInput");
             setBlur(false);
             focus.focus();
-            clearTimeout(keyDownTimer.current)
             if(gameState === "not started") {
                 keyDownTimer.current = setTimeout(() => {
                     setBlur(true);
@@ -60,6 +58,7 @@ export default function Test(){
             button.classList.remove('text-sky-900');
             button.classList.add('bg-sky-900');
             button.classList.add('text-emerald-500');
+            clearTimeout(keyDownTimer.current)
         })
 
         return () => clearTimeout(keyDownTimer.current)
@@ -76,26 +75,15 @@ export default function Test(){
     useEffect(() => {
         if(gameState === "not started" && inputValue !== "") {
             setGameState("started")
-        } else if (gameState === "started") {
-            
         }
         if (inputValue.length >= 1){
             typing();
-        }
 
+        }
         if(inputValue.length >= 1){
             setErrors(errors => getErrors(errors))
         }
     }, [inputValue])
-
-    function timer(){
-        if(timeLeft > 0){
-            setTimeLeft(timeLeft => timeLeft - 1)
-        } else {
-            clearInterval(textTimer);
-            console.log("no")
-        }
-    }
 
     function getErrors(){
         let errors = 0;
@@ -109,26 +97,51 @@ export default function Test(){
     }
 
     useEffect(() => {
+        let countup
         if (gameState === "started") {
             options.classList.remove("bg-sky-900")
             options.classList.add("bg-sky-900/40")
-            textTimer = setInterval(timer(), 1000)
+            countup = setInterval(() => {
+                setTimeElapsed(seconds => seconds + 1)
+            }, 1000)
         }
+
+        if (characterIndex == word.length && current_user.hasOwnProperty('email') && gameState === "finished"){
+            submitScore();
+            console.log('hello')
+        }
+
+        return () => clearInterval(countup)
     }, [gameState])
 
     useEffect(() => {
         if (gameState === "started" && characterIndex == word.length) {
             inputField.disabled = true
             setDisplayResult(true)
-        }
+            setWpm(getWpm())
+            setAccuracy(getAccuracy())
+            setGameState("finished")
+        } 
+
+        const spans = document.querySelectorAll('span')
+        spans.forEach((span) => span.classList.remove('underline'))
+        if(characterIndex !== spans.length) spans[characterIndex].classList.add('underline')
     }, [characterIndex])
+
+    function getWpm(){
+        return Math.round((((characterIndex - errors) / 5) / (timeElapsed)) * 60)
+    }
+
+    function getAccuracy(){
+        return Math.round(((characterIndex - errors) / characterIndex) * 100)
+    }
+
+    // useEffect(() => {
+    //     getWpm()
+    // }, [timeElapsed])
 
     function typing(){
         const characters = document.querySelectorAll('span');
-
-        // c(characters[characterIndex].innerHTML);
-        // c(inputValue[characterIndex]);
-        // c(characterIndex);
 
         if(inputValue[characterIndex] === characters[characterIndex].innerHTML){
             setCharacterIndex(characterIndex => characterIndex + 1)
@@ -136,12 +149,12 @@ export default function Test(){
             c("correct")
         } else if (inputValue[characterIndex] === undefined ){
             let characterValue = characterIndex - 1
-            characters[characterValue].classList.remove('text-green-500', 'text-red-500', 'underline')
+            characters[characterValue].classList.remove('text-green-500', 'text-red-500', 'italic')
             setCharacterIndex(characterIndex => characterIndex - 1)
         } else if(inputValue[characterIndex] !== characters[characterIndex].innerHTML) {
             setCharacterIndex(characterIndex => characterIndex + 1)
             characters[characterIndex].classList.add('text-red-500')
-            characters[characterIndex].classList.add('underline')
+            characters[characterIndex].classList.add('italic')
             // setErrors(errors => errors + 1)
             //change handling to listen to inputVALUE and be equivalent to the amount of span tags that are red
             c("incorrect")
@@ -149,6 +162,30 @@ export default function Test(){
             setCharacterIndex(1)
             characters[0].classList.remove('text-green-500', 'text-red-500')
         }
+    }
+
+    function submitScore(){
+        console.log({
+            score: wpm,
+                accuracy: accuracy,
+                style: textStyle,
+                user_id: current_user.id
+        })
+
+        fetch('http://localhost:3000/scores', {
+            method: 'POST',
+            headers: {
+                Authorization: localStorage.getItem("token")
+            },
+            body: JSON.stringify({
+                score: wpm,
+                accuracy: accuracy,
+                style: textStyle,
+                user_id: current_user.id
+            })
+        })
+        .then(r => r.json())
+        .then(data => console.log(data))
     }
 
     return (
@@ -180,8 +217,8 @@ export default function Test(){
                 </div>
                 <div className="w-[2px] h-[70%] bg-sky-900"></div>
                 <div className="flex flex-col justify-center w-1/3 h-full">
-                    <h2 className="mx-auto text-sky-900/70 font-bold select-none">TIME REMAINING</h2>
-                    <h1 className="mx-auto text-sky-900/70 font-bold select-none">{timeLeft}</h1>
+                    <h2 className="mx-auto text-sky-900/70 font-bold select-none">TIME ELAPSED</h2>
+                    <h1 className="mx-auto text-sky-900/70 font-bold select-none">{Math.floor(timeElapsed / 60)}:{timeElapsed % 60 > 9 ? timeElapsed % 60 : "0" + timeElapsed % 60}</h1>
                 </div>
                 <div className="w-[2px] h-[70%] bg-sky-900"></div>
                 <div className="flex flex-col justify-center w-1/3 h-full">
@@ -194,7 +231,7 @@ export default function Test(){
                 {displayResult ? <div className="absolute justify-center items-center flex z-50 -top-40 left-0 w-screen h-screen bg-black/50">
                     <div className="w-1/3 h-1/3 bg-emerald-500 rounded-lg flex flex-col relative">
                         <div className="w-full flex flex-col mt-3 items-center py-4 h-[37%]">
-                            <p className="w-full text-center text-2xl font-bold pt-1 text-sky-900">GAME SUMMARY: <span className="text-lg">{timeStarted - timeLeft}s elapsed</span></p>
+                            <p className="w-full text-center text-2xl font-bold pt-1 text-sky-900">GAME SUMMARY: <span className="text-lg">{timeElapsed}s elapsed</span></p>
                             <p className="text-sky-900"><strong>game-mode: </strong>{textStyle}</p>
                         </div>
                         <div className="w-full flex flex-row h-[15%] items-center pb-5">

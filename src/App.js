@@ -7,34 +7,35 @@ import Leaderboard from './LeaderboardRow';
 import Profile from './Profile';
 import Signup from './Signup';
 import Info from './Info';
+import ProfileEdit from './ProfileEdit';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({})
   
   useEffect(()=> {
-    fetch("http://localhost:3000/users/current", {
+    fetch('http://localhost:3000/users/current', {
       headers: {
-        Authorization: localStorage.getItem("token")
+          Authorization: localStorage.getItem("token")
       }
-    })
-    .then(r => {
-      if (r.ok){
-        console.log(r)
-        setCurrentUser(r)
-        return r.json()
-      } else {
-        console.log(r)
-      }
-    })
+      })
+      .then(r => r.json())
+      .then(r => {
+          if (r.hasOwnProperty('email')){
+              setCurrentUser(r)
+              console.log(r)
+          } else {
+              console.log("not signed in")
+          }
+      })
   }, [])
 
   return (
     <div className="bg-emerald-500 fixed w-screen h-screen justify-center">
       <Router>
-        <Navbar current_user={currentUser} />
+        <Navbar setCurrentUser={setCurrentUser} current_user={currentUser} />
         <Routes>
           <Route exact path="/" element={
-            <Test />
+            <Test current_user={currentUser} />
           }/>
           <Route path="/signin" element={
             <Signin setCurrentUser={setCurrentUser} />
@@ -47,6 +48,9 @@ function App() {
           }/>
           <Route path="/profile" element={
             <Profile current_user={currentUser} />
+          }/>
+          <Route path="/profile/edit" element={
+            <ProfileEdit current_user={currentUser} />
           }/>
           <Route path="/info" element={
             <Info />
