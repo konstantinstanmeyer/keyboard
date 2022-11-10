@@ -173,7 +173,7 @@ export default function Test({ current_user }){
             user_id: current_user.id
         })
 
-        fetch('http://localhost:3000/scores', {
+        fetch('http://localhost:3000/score', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"

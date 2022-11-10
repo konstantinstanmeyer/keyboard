@@ -3,14 +3,16 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Test from './Test';
 import Signin from './Signin';
 import Navbar from './Navbar';
-import Leaderboard from './LeaderboardRow';
+import Leaderboard from './Leaderboard';
 import Profile from './Profile';
 import Signup from './Signup';
 import Info from './Info';
 import ProfileEdit from './ProfileEdit';
+import ViewProfile from './ViewProfile';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({})
+  const [visitedId, setVisitedId] = useState(undefined)
   
   useEffect(()=> {
     fetch('http://localhost:3000/users/current', {
@@ -44,13 +46,16 @@ function App() {
             <Signup />
           }/>
           <Route path="/leaderboard" element={
-            <Leaderboard />
+            <Leaderboard setVisitedId={setVisitedId} />
           }/>
           <Route path="/profile" element={
             <Profile current_user={currentUser} />
           }/>
           <Route path="/profile/edit" element={
             <ProfileEdit current_user={currentUser} />
+          }/>
+          <Route path="/profile/:id" element={
+            <ViewProfile id={visitedId} />
           }/>
           <Route path="/info" element={
             <Info />

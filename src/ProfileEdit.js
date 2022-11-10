@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Form } from 'react-router-dom';
 
 export default function ProfileEdit({ current_user }){
-    const [avatar, setAvatar] = useState(null)
+    const [avatar, setAvatar] = useState({
+        file:null
+    })
     const [origin, setOrigin] = useState(false)
     const [viewScore, setViewScore] = useState(false)
     const [viewProfile, setViewProfile] = useState(false)
@@ -52,10 +54,12 @@ export default function ProfileEdit({ current_user }){
         }
     }
 
+    console.log(avatar)
+
     return(
         <div className="relative w-1/4 mt-14 z-20 rounded-xl mx-auto flex flex-col h-fit bg-sky-900">
             <div className="flex flex-col justify-center relative ml-6 mt-6 mr-6">
-                <img className="h-32 w-32 mx-auto" src={current_user.avatar_url ? current_user.avatar_url : "https://cdn-icons-png.flaticon.com/512/2458/2458293.png"}/>
+                <img className="h-32 w-32 mx-auto object-cover border-4 border-emerald-500 rounded-md" src={current_user.avatar_url ? current_user.avatar_url : "https://cdn-icons-png.flaticon.com/512/2458/2458293.png"}/>
                 <div className="flex flex-col py-3">
                     <input onChange={(e) => setAvatar(e.target.files[0])} placeholder="yes" type="file" name="avatar" className="mx-auto w-1/3 bg-red"  />
                     <button className="w-1/3 mx-auto" onClick={(e) => handleAvatarSubmit(e)}>submit</button>
