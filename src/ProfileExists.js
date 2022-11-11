@@ -121,7 +121,7 @@ export default function ProfileExists({ current_user }){
     return (
         <div className="relative w-2/5 mt-14 z-20 rounded-xl justify-center mx-auto flex flex-col h-fit bg-sky-900">
             <div className="flex flex-row items-center justify-center relative mt-6 mb-6">
-                <img className="h-32 w-32 object-cover border-4 border-emerald-500" src={avatar.file !== null ? image : current_user.avatar_url ? current_user.avatar_url : "https://cdn-icons-png.flaticon.com/512/2458/2458293.png"}/>
+                <img className="h-32 w-32 object-cover border-4 border-emerald-500" src={avatar.file !== null ? image : current_user.avatar_url ? current_user.avatar_url : "https://avatars.githubusercontent.com/u/35440139?v=4}"}/>
                     <div className="ml-4 flex flex-col h-full w-1/3">
                         <h3 className="text-emerald-500">{current_user.username} <span className="text-xs">place of origin</span></h3>
                         <p className="text-emerald-500 mb-1">Highscore: {highScore}WPM</p>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Chart, Line } from 'react-chartjs-2';
+import PrivateProfile from './PrivateProfile';
 import {
     Chart as ChartJS,
     LineElement,
@@ -73,6 +74,8 @@ export default function ViewProfile({ id }){
         })
     }, [])
 
+    if (!user["view_profile?"]) return <PrivateProfile />
+
     return(
         <div className="relative w-2/5 mt-14 z-20 rounded-xl justify-center mx-auto flex flex-col h-fit bg-sky-900">
             <div className="flex flex-row items-center mx-auto relative mt-6 mb-6">
@@ -82,7 +85,7 @@ export default function ViewProfile({ id }){
                 <div className="h-fit mx-auto">
                     <div className="ml-4 flex flex-col h-full w-full">
                         <h3 className="pt-3 text-emerald-500">{user.username} <span className="text-xs">place of origin</span></h3>
-                        <p className="text-emerald-500 mt-2">high_score: {highScore} WPM</p>
+                        <p className="text-emerald-500 mt-2">Highscore: {highScore} WPM</p>
                     </div>
                 </div>
             </div>

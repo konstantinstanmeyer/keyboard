@@ -1,7 +1,5 @@
 import React,{ useEffect, useState } from 'react';
-import ProfileEdit from './ProfileEdit';
 import ProfileExists from './ProfileExists';
-import ProfileSettings from './ProfileSettings';
 import ProfileGuest from './ProfileGuest';
 
 export default function Profile({ current_user }){
@@ -26,8 +24,6 @@ export default function Profile({ current_user }){
             }
         })
     }, [])
-
-    console.log(user)
 
     if (profile == "normal"){
         return <ProfileExists current_user={user} setProfile={setProfile} />
