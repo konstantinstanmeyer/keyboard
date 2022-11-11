@@ -46,25 +46,20 @@ export default function Leaderboard(){
     }
 
 
-    const displayedUsers = users.filter(user => user["view_high_score?"]).filter(user => user.scores.length >= 1)
+    const displayedUsers = users.filter(user => user["view_high_score?"]).filter(user => user.scores.length >= 1).filter(user => getHighestScore(user))
 
-    // confirmUser(users[1])
-
-    // function confirmUser(user){
-    //     for (let i = 0; i < user.scores.length; i++){
-    //         console.log(user.scores[i])
-    //     }
-    // }
+    if (style === "bacon" && wordCount !== 25) setWordCount(25)
 
     return(
         <div class="flex relative flex-col justify-center h-3/5 rounded-b-lg">
             <div className="bg-sky-900 w-2/5 h-14 mx-auto my-6 rounded-lg relative items-center flex flex-row">
-                <p onClick={() => setStyle('random')} className={`w-1/2 ${style === "random" ? "text-emerald-500/100": "text-emerald-500/40"} text-center hover:text-emerald-500/100 hover:cursor-pointer`}>random</p>
-                <p onClick={() => setStyle('quote')} className={`w-1/2 text-center ${style === "quote" ? "text-emerald-500/100": "text-emerald-500/40"} hover:text-emerald-500/100 hover:cursor-pointer`}>quote</p>
+                <p onClick={() => setStyle('random')} className={`w-1/3 ${style === "random" ? "text-emerald-500/100": "text-emerald-500/40"} text-center hover:text-emerald-500/100 hover:cursor-pointer`}>random</p>
+                <p onClick={() => setStyle('quote')} className={`w-1/3 text-center ${style === "quote" ? "text-emerald-500/100": "text-emerald-500/40"} hover:text-emerald-500/100 hover:cursor-pointer`}>quote</p>
+                <p onClick={() => setStyle('bacon')} className={`w-1/3 text-center ${style === "bacon" ? "text-emerald-500/100": "text-emerald-500/40"} hover:text-emerald-500/100 hover:cursor-pointer`}>bacon</p>
                 <div className="w-[2px] h-[60%] bg-emerald-500"></div>
-                <p onClick={() => setWordCount(15)} className={`w-1/2 ${wordCount === 15 ? "text-emerald-500/100": "text-emerald-500/40"} text-center hover:text-emerald-500/100 hover:cursor-pointer`}>15</p>
-                <p onClick={() => setWordCount(25)} className={`w-1/2 ${wordCount === 25 ? "text-emerald-500/100": "text-emerald-500/40"} text-center hover:text-emerald-500/100 hover:cursor-pointer`}>25</p>
-                <p onClick={() => setWordCount(50)} className={`w-1/2 ${wordCount === 50 ? "text-emerald-500/100": "text-emerald-500/40"} text-center hover:text-emerald-500/100 hover:cursor-pointer`}>50</p>
+                <p id="15" onClick={() => setWordCount(15)} className={`w-1/3 ${wordCount === 15 && style !== "bacon" ? "text-emerald-500/100": "text-emerald-500/40"} text-center hover:text-emerald-500/100 hover:cursor-pointer`}>15</p>
+                <p id="30" onClick={() => setWordCount(25)} className={`w-1/3 ${wordCount === 25 || style === "bacon" ? "text-emerald-500/100": "text-emerald-500/40"} text-center hover:text-emerald-500/100 hover:cursor-pointer`}>25</p>
+                <p id="45" onClick={() => setWordCount(50)} className={`w-1/3 ${wordCount === 50 && style !== "bacon" ? "text-emerald-500/100": "text-emerald-500/40"} text-center hover:text-emerald-500/100 hover:cursor-pointer`}>50</p>
             </div>
             <div class="w-1/2 mx-auto h-3/5 relative">
                 <table class="table w-full h-20">

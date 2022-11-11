@@ -4,7 +4,6 @@ import Keyboard from "./Keyboard";
 
 export default function Test({ current_user }){
     const [word, setWord] = useState("")
-        // "program system public early can increase restaurant performance consider people planet interest head govern general possible who point write plant state develop"
     const [blur, setBlur] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [gameState, setGameState] = useState("not started");
@@ -19,11 +18,9 @@ export default function Test({ current_user }){
     const [accuracy, setAccuracy] = useState(0)
     const [wordCount, setWordCount] = useState(25)
     const [isLoading, setIsLoading] = useState(false)
+    const [loadedOnce, setLoadedOnce] = useState(false)
     const [wpm, setWpm] = useState("...")
-    const quote = document.querySelector('#quote')
-    const random = document.querySelector('#random')
-    const yours = document.querySelector('#yours')
-    let textTimer;
+    const [language, setLanguage] = useState("en")
     const c = console.log.bind(document)
 
     useEffect(() => {
@@ -31,6 +28,7 @@ export default function Test({ current_user }){
         
         keyDownTimer.current = setTimeout(() => {
             setBlur(true);
+            console.log("blur1")
             document.activeElement.blur()
         }, keyDownWait)
 
@@ -39,8 +37,15 @@ export default function Test({ current_user }){
             //fix
             button.classList.remove('text-emerald-500');
             button.classList.remove('bg-sky-900');
+            // keyDownTimer.current = setTimeout(() => {
+            //     if (gameState !== "started"){
+            //         setBlur(true);
+            //         document.activeElement.blur();
+            //     }
+            // }, keyDownWait)
             button.classList.add('bg-emerald-500');
             button.classList.add('text-sky-900');
+
             // inputField.disabled = false;
         })
 
@@ -49,21 +54,23 @@ export default function Test({ current_user }){
             let focus = document.querySelector("#typeInput");
             setBlur(false);
             focus.focus();
-            if(gameState === "not started") {
-                keyDownTimer.current = setTimeout(() => {
-                    setBlur(true);
-                    document.activeElement.blur();
-                }, keyDownWait)
-            }
             button.classList.remove('bg-emerald-500');
             button.classList.remove('text-sky-900');
             button.classList.add('bg-sky-900');
             button.classList.add('text-emerald-500');
-            clearTimeout(keyDownTimer.current)
         })
 
         return () => clearTimeout(keyDownTimer.current)
     }, [])
+
+    useEffect(() => {
+
+        if(gameState === "started") {
+           clearTimeout(keyDownTimer.current)
+        }
+
+        // return () => clearTimeout(keyDownTimer.current)
+    }, [keyDownTimer])
 
     function validatedWords(word){
         let lettersArray = [];
@@ -98,11 +105,20 @@ export default function Test({ current_user }){
     }
 
     useEffect(() => {
-        fetch(`http://localhost:3000/words/${wordCount}`)
-        .then(r => r.json())
-        .then(r => {
-            setWord(r[0])
-        })
+        if(textStyle == "random"){
+            setIsLoading(true)
+            fetch(`http://localhost:3000/words/${wordCount}`)
+            .then(r => r.json())
+            .then(r => {
+                setWord(r[0])
+                setIsLoading(false)
+                clearTimeout(keyDownTimer.current)
+                setLoadedOnce(true)
+            })
+        }
+
+        let focus = document.querySelector("#typeInput");
+        focus.focus()
     }, [wordCount])
 
     useEffect(() => {
@@ -110,22 +126,18 @@ export default function Test({ current_user }){
         if (gameState === "started") {
             options.classList.remove("bg-sky-900")
             options.classList.add("bg-sky-900/40")
+            console.log("started")
             countup = setInterval(() => {
                 setTimeElapsed(seconds => seconds + 1)
             }, 1000)
-            clearTimeout(keyDownTimer.current)
         }
 
         if (characterIndex == word.length - 1 && current_user.hasOwnProperty('email') && gameState === "finished"){
             submitScore();
-            console.log('hello')
         }
 
         return () => clearInterval(countup)
     }, [gameState])
-
-    console.log(word.length)
-    console.log(characterIndex)
 
     useEffect(() => {
         if (gameState === "started" && characterIndex == word.length - 1) {
@@ -199,8 +211,37 @@ export default function Test({ current_user }){
             })
         })
         .then(r => r.json())
-        .then(data => console.log(data))
+        .then(data => {
+            console.log(data)
+            console.log('score submitted successfully!')
+        })
     }
+
+    useEffect(() => {
+        if(textStyle === "bacon"){
+            setIsLoading(true)
+            fetch('http://localhost:3000/bacon')
+            .then(r => r.json())
+            .then(data => {
+                data[0] = data[0].slice(2)
+                setWord(data.slice(0,25).join(" ") + " ")
+                setIsLoading(false)
+            })
+        } 
+        else if (textStyle === "random" && loadedOnce){
+            setIsLoading(true)
+            fetch(`http://localhost:3000/words/${wordCount}`)
+            .then(r => r.json())
+            .then(r => {
+                setWord(r[0])
+                setIsLoading(false)
+            })
+        }
+        let focus = document.querySelector("#typeInput");
+        focus.focus()
+    }, [textStyle])
+
+    if (textStyle === "bacon" && wordCount !== 25) setWordCount(25)
 
     return (
         <div className="items-center h-1/2 relative">
@@ -216,7 +257,7 @@ export default function Test({ current_user }){
                     <h2 onClick={() => setTextStyle("random")} id="random" className={`${textStyle == "random" ? "text-emerald-500/100" : "text-emerald-500/40"} hover:text-emerald-500/100 hover:cursor-pointer ml-2 text-sm font-bold text-center w-1/3`}>random</h2>
                     <p onClick={() => setTextStyle("quote")} id="quote" className={`${textStyle == "quote" ? "text-emerald-500/100" : "text-emerald-500/40"} hover:text-emerald-500/100 hover:cursor-pointer text-sm font-bold text-center w-1/3`}>quote</p>
                     <div className="dropdown dropdown-right m-0 p-0 h-fit ml-2">
-                    <label tabIndex={0} className={`btn ${textStyle == "yours" ? "text-emerald-500/100" : "text-emerald-500/40"} no-animation bg-transparent text-sm hover:bg-emerald-300 border-none m-0 p-0 hover:text-emerald-500/100 hover:bg-transparent lowercase`}>yours</label>
+                    <p onClick={() => setTextStyle("bacon")} id="bacon" className={`${textStyle == "bacon" ? "text-emerald-500/100" : "text-emerald-500/40"} hover:text-emerald-500/100 hover:cursor-pointer text-sm font-bold text-center w-1/3`}>bacon</p>
                     <ul tabIndex={0} className="dropdown-content menu p-2 shadow rounded-box w-52 bg-sky-800">
                         <li className="bg-emerald-500 border-b-[4px] border-sky-800 text-sky-900"><a>option 1</a></li>
                         <li className="bg-emerald-500 text-sky-900"><a>option 2</a></li>
@@ -224,7 +265,17 @@ export default function Test({ current_user }){
                 </div>
                 </div>
             </div>
-            <div className="w-2/5 h-10 mx-auto mt-6 rounded-md items-center flex flex-row">
+            <div className="w-2/5 h-10 mx-auto mt-6 rounded-md items-center flex flex-row relative">
+                {textStyle === "quote" ? <div className="absolute dropdown dropdown-hover -right-28 -top-14">
+                    <label tabIndex={0} className="btn m-1 bg-sky-900 hover:bg-sky-600 text-emerald-500 border-none">Language</label>
+                    <ul tabIndex={0} className="dropdown-content bg-sky-900 menu p-2 shadow rounded-box w-52">
+                        <li onClick={() => setLanguage("en")} className={`${language === "en" ? "bg-sky-600" : "bg-sky-900"} text-md hover:bg-sky-600 text-emerald-500 font-bold`}><a>English</a></li>
+                        <li onClick={() => setLanguage("es")} className={`${language === "es" ? "bg-sky-600" : "bg-sky-900"} text-md hover:bg-sky-600 text-emerald-500 font-bold`}><a>Español</a></li>
+                        <li onClick={() => setLanguage("fr")} className={`${language === "fr" ? "bg-sky-600" : "bg-sky-900"} text-md hover:bg-sky-600 text-emerald-500 font-bold`}><a>Français</a></li>
+                        <li onClick={() => setLanguage("de")} className={`${language === "de" ? "bg-sky-600" : "bg-sky-900"} text-md hover:bg-sky-600 text-emerald-500 font-bold`}><a>Deutsch</a></li>
+                        <li onClick={() => setLanguage("it")} className={`${language === "it" ? "bg-sky-600" : "bg-sky-900"} text-md hover:bg-sky-600 text-emerald-500 font-bold`}><a>Italiano</a></li>
+                    </ul>
+                </div>: null}
                 <div className="flex flex-col justify-center w-1/3 h-full">
                     <h2 className="mx-auto text-sky-900/70 font-bold select-none">ERRORS</h2>
                     <h1 className="mx-auto text-sky-900/70 font-bold select-none">{errors}</h1>
@@ -263,7 +314,7 @@ export default function Test({ current_user }){
                     </div>
                 </div> : null}
                 <div className="relative flex flex-col justify-center mb-10">
-                    <div id="test-zone" className={`h-fit justify-center flex mt-8 my-5 py-1 bg-emerald-600 min-h-[4rem] rounded-lg ${blur && !isLoading ? 'blur-sm transition duration-300' : null} relative`} onClick={() => inputField.focus()}>
+                    <div id="test-zone" className={`h-fit justify-center flex mt-8 my-5 py-1 bg-emerald-600 px-5 min-h-[4rem] rounded-lg ${blur && !isLoading ? 'blur-sm transition duration-300' : null} relative`} onClick={() => inputField.focus()}>
                         {isLoading ? <div className="h-40 w-full relative flex justify-center items-center animate-spin">
                             <img className="!blur-none w-1/4" src="https://cdn-icons-png.flaticon.com/512/7329/7329801.png"/>
                         </div> : 
