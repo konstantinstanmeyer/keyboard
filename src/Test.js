@@ -3,7 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 import Keyboard from "./Keyboard";
 
 export default function Test({ current_user }){
-    const word = "program system public early can increase restaurant performance consider people planet interest head govern general possible who point write plant state develop"
+    const [word, setWord] = useState("")
+        // "program system public early can increase restaurant performance consider people planet interest head govern general possible who point write plant state develop"
     const [blur, setBlur] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [gameState, setGameState] = useState("not started");
@@ -97,6 +98,14 @@ export default function Test({ current_user }){
     }
 
     useEffect(() => {
+        fetch(`http://localhost:3000/words/${wordCount}`)
+        .then(r => r.json())
+        .then(r => {
+            setWord(r[0])
+        })
+    }, [wordCount])
+
+    useEffect(() => {
         let countup
         if (gameState === "started") {
             options.classList.remove("bg-sky-900")
@@ -107,7 +116,7 @@ export default function Test({ current_user }){
             clearTimeout(keyDownTimer.current)
         }
 
-        if (characterIndex == word.length && current_user.hasOwnProperty('email') && gameState === "finished"){
+        if (characterIndex == word.length - 1 && current_user.hasOwnProperty('email') && gameState === "finished"){
             submitScore();
             console.log('hello')
         }
@@ -115,14 +124,17 @@ export default function Test({ current_user }){
         return () => clearInterval(countup)
     }, [gameState])
 
+    console.log(word.length)
+    console.log(characterIndex)
+
     useEffect(() => {
-        if (gameState === "started" && characterIndex == word.length) {
+        if (gameState === "started" && characterIndex == word.length - 1) {
             inputField.disabled = true
             setDisplayResult(true)
             setWpm(getWpm())
             setAccuracy(getAccuracy())
             setGameState("finished")
-        } 
+        }
 
         const spans = document.querySelectorAll('span')
         spans.forEach((span) => span.classList.remove('underline'))
@@ -251,7 +263,7 @@ export default function Test({ current_user }){
                     </div>
                 </div> : null}
                 <div className="relative flex flex-col justify-center mb-10">
-                    <div id="test-zone" className={`h-fit justify-center flex mt-8 my-5 py-1 bg-emerald-600 rounded-lg ${blur && !isLoading ? 'blur-sm transition duration-300' : null} relative`} onClick={() => inputField.focus()}>
+                    <div id="test-zone" className={`h-fit justify-center flex mt-8 my-5 py-1 bg-emerald-600 min-h-[4rem] rounded-lg ${blur && !isLoading ? 'blur-sm transition duration-300' : null} relative`} onClick={() => inputField.focus()}>
                         {isLoading ? <div className="h-40 w-full relative flex justify-center items-center animate-spin">
                             <img className="!blur-none w-1/4" src="https://cdn-icons-png.flaticon.com/512/7329/7329801.png"/>
                         </div> : 
@@ -263,7 +275,7 @@ export default function Test({ current_user }){
                 </div>
                 <Keyboard />
             </div>
-            <p className="absolute bottom-20 left-12 text-xl font-bold">{gameState}</p>
+            {/* <p className="absolute bottom-20 left-12 text-xl font-bold">{gameState}</p> */}
         </div>
     )
 }

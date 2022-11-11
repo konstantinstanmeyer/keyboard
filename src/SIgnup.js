@@ -63,6 +63,7 @@ export default function Signup(){
                     <img onClick={() => setClosed(!closed)} className="h-6 w-6 relative ml-auto -top-11 right-[20%]" src={closed ? "https://cdn-icons-png.flaticon.com/512/2356/2356734.png" : "https://cdn-icons-png.flaticon.com/512/709/709612.png"}/>
                     <button id="submit-button" className="rounded-md h-20 w-2/3 bg-emerald-500 m-auto text-2xl text-sky-900">Sign In</button>
                 </form>
+                <p onClick={() => navigate('/signin')} className="text-center text-emerald-500 mt-1 hover:cursor-pointer italic">return to login</p>
             </div>
         </div>
     )

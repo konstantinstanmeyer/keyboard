@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function Leaderboard({ setVisitedId }){
+export default function Leaderboard(){
     const navigate = useNavigate();
     const [users, setUsers] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -26,6 +26,8 @@ export default function Leaderboard({ setVisitedId }){
     
     console.log(isLoading)
 
+    const displayedUsers = users.filter(user => user["view_high_score?"])
+
     return(
         <div class="flex relative justify-center h-3/5 rounded-b-lg">
             <div class="overflow-x-auto w-1/2 mt-10 h-full">
@@ -46,15 +48,15 @@ export default function Leaderboard({ setVisitedId }){
                         <td className="w-1/4 h-full bg-sky-800"></td>
                         <td className="w-1/4 h-full bg-sky-800"></td>                      
                         <img className="w-1/4 absolute left-[39%] top-[25%] m-0 animate-spin" src="https://cdn-icons-png.flaticon.com/512/7329/7329801.png"/>
-                        </tr>: users.map((user, i) => {
+                        </tr>: displayedUsers.map((user, i) => {
                             return (
                                 <tr>
                                     <td className="bg-sky-800 w-1/4">
                                         <div className="flex items-center space-x-3">
                                             <div className="items-center flex flex-row avatar pr-0 ml-2">
                                                 <p className="w-3 text-lg font-bold text-emerald-500">{i + 1}</p>
-                                                <div className="ml-12 rounded-full mask w-12 h-12 border-2 border-emerald-500">
-                                                    <img className="" src={user.avatar_url ? user.avatar_url : `https://cdn-icons-png.flaticon.com/512/3135/3135715.png`} alt="Avatar" />
+                                                <div className="ml-12 object-cover rounded-full mask w-12 h-12 border-2 border-emerald-500">
+                                                    <img className="" src={user.avatar_url ? user.avatar_url : `https://avatars.githubusercontent.com/u/35440139?v=4}`} alt="Avatar" />
                                                 </div>
                                             </div>
                                         </div>
@@ -63,7 +65,7 @@ export default function Leaderboard({ setVisitedId }){
                                         <span className="">{user.username}</span>
                                     </td>
                                     <td className="bg-sky-800 w-1/4 text-emerald-500 text-md italic">
-                                        <span onClick={() => handleVisitProfile(user)} className="hover:underline hover:cursor-pointer">view profile</span>
+                                        {user["view_profile?"] ? <span onClick={() => handleVisitProfile(user)} className="hover:underline hover:cursor-pointer">view profile</span> : <span className="">private profile</span>}
                                     </td>
                                     <th className="bg-sky-800 w-1/4 text-emerald-500">
                                         <span className="">{user.high_score}</span>

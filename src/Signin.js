@@ -56,24 +56,22 @@ export default function Signin({ setCurrentUser }){
         })
         .then((res) => {
             if (res.ok) {
-            console.log(res);
-            localStorage.setItem("token", res.headers.get("Authorization"))
-        }})
-        .then(r => r.json())
-        .then( data => setCurrentUser(data))
-        .then(fetch('http://localhost:3000/users/current', {
-                headers: {
-                    Authorization: localStorage.getItem("token")
-                }
-                })
-                .then(r => r.json())
-                .then(r => {
-                    if (r.hasOwnProperty('email')){
-                        setCurrentUser(r)
-                        console.log(r)
+                console.log(res);
+                localStorage.setItem("token", res.headers.get("Authorization"))
+                fetch('http://localhost:3000/users/current', {
+                    headers: {
+                        Authorization: localStorage.getItem("token")
                     }
+                    })
+                    .then(r => r.json())
+                    .then(r => {
+                        if (r.hasOwnProperty('email')){
+                            setCurrentUser(r)
+                            navigate('/profile')
+                        }
                 })
-        )
+            }
+        })
     }
 
     return(
