@@ -121,6 +121,9 @@ export default function Test({ current_user }){
         focus.focus()
     }, [wordCount])
 
+    console.log(word[characterIndex])
+    console.log(word)
+
     useEffect(() => {
         let countup
         if (gameState === "started") {
@@ -218,6 +221,7 @@ export default function Test({ current_user }){
     }
 
     useEffect(() => {
+        setBlur(false)
         if(textStyle === "bacon"){
             setIsLoading(true)
             fetch('http://localhost:3000/bacon')
@@ -227,8 +231,7 @@ export default function Test({ current_user }){
                 setWord(data.slice(0,25).join(" ") + " ")
                 setIsLoading(false)
             })
-        } 
-        else if (textStyle === "random" && loadedOnce){
+        } else if (textStyle === "random" && loadedOnce){
             setIsLoading(true)
             fetch(`http://localhost:3000/words/${wordCount}`)
             .then(r => r.json())
@@ -236,12 +239,37 @@ export default function Test({ current_user }){
                 setWord(r[0])
                 setIsLoading(false)
             })
+        } else if (textStyle == "quote") {
+            setIsLoading(true);
+            fetch(`http://localhost:3000/quote/${language}`)
+            .then(r => r.json())
+            .then(data => {
+                setWord(data.results[0].quote.split(" ").slice(0, 25).join(" ") + " ")
+                setIsLoading(false);
+            })
         }
         let focus = document.querySelector("#typeInput");
         focus.focus()
     }, [textStyle])
 
-    if (textStyle === "bacon" && wordCount !== 25) setWordCount(25)
+    useEffect(() => {
+        if (textStyle === "quote"){
+            setIsLoading(true);
+            fetch(`http://localhost:3000/quote/${language}`)
+            .then(r => r.json())
+            .then(data => {
+                setWord(data.results[0].quote.split(" ").slice(0, 25).join(" ") + " ")
+                setIsLoading(false);
+            })
+            setBlur(false)
+        }
+    }, [language])
+
+    if (textStyle === "bacon" && wordCount !== 25){
+        setWordCount(25)
+    } else if (textStyle === "quote" && wordCount !== 25){
+        setWordCount(25)
+    }
 
     return (
         <div className="items-center h-1/2 relative">

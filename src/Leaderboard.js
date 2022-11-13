@@ -14,21 +14,13 @@ export default function Leaderboard(){
         .then(response => response.json())
         .then(data => {
             setUsers(data.sort(function(a, b){return b.high_score-a.high_score}))
-            console.log(data)
             setIsLoading(false)
         })
     }, [])
 
-    console.log(users)
-
     function handleVisitProfile(user){
-        console.log(user.id)
         navigate(`/profile/${user.id}`)
     }
-    
-    console.log(isLoading)
-
-    console.log(users)
 
     function getHighestScore(user){
         let score = 0;
@@ -48,7 +40,11 @@ export default function Leaderboard(){
 
     const displayedUsers = users.filter(user => user["view_high_score?"]).filter(user => user.scores.length >= 1).filter(user => getHighestScore(user))
 
-    if (style === "bacon" && wordCount !== 25) setWordCount(25)
+    if (style === "bacon" && wordCount !== 25){
+        setWordCount(25)
+    } else if (style === "quote" && wordCount !== 25){
+        setWordCount(25)
+    }
 
     return(
         <div class="flex relative flex-col justify-center h-3/5 rounded-b-lg">

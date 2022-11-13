@@ -11,7 +11,7 @@ export default function Signup(){
 
     function handleSubmit(e){
         e.preventDefault();
-        if(emailRegex.test(email)){
+        if(emailRegex.test(email) && password.length > 5){
             fetch("http://localhost:3000/signup", {
             method: "post",
             headers: {
@@ -36,6 +36,8 @@ export default function Signup(){
             })
             .then((json) => console.dir(json))
             .catch((err) => console.error(err))
+        } else if (password.length > 5) {
+            alert("Password must be at least 6 digits")
         } else {
             alert("Please enter a valid email")
         }

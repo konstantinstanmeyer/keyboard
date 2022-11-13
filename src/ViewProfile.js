@@ -23,7 +23,7 @@ export default function ViewProfile({ id }){
     const [isLoading, setIsLoading] = useState(false)
     const [highScore, setHighScore] = useState(0)
     const [data, setData] = useState({
-        labels: ["","","","","","","","","","last"],
+        labels: [],
         datasets: [{
             data: [],
             backgroundColor: "transparent",
@@ -66,14 +66,17 @@ export default function ViewProfile({ id }){
             })
             if (userArray.scores.length > 0){
                 setHighScore(Math.max(...userScores));
+            } else {
+                setHighScore(0)
             }
             data.datasets[0].data = userData.scores.map((value) => {
                 return value.score;
             }).slice(-10)
+            data.datasets[0].data.forEach(() => data.labels.push(""))
             setIsLoading(false)
         })
     }, [])
-
+    
     if (!user["view_profile?"]) return <PrivateProfile />
 
     return(
@@ -89,7 +92,7 @@ export default function ViewProfile({ id }){
                     </div>
                 </div>
             </div>
-            <h2 className="text-center text-lg underline underline-offset-4 italic text-emerald-500">previous ten rounds</h2>
+            <h2 className="text-center text-lg underline underline-offset-4 italic text-emerald-500">previous rounds</h2>
             <div className="">
                 {isLoading || data.datasets[0].data.length == 0 ? <p className="pb-5 text-center text-emerald-500 font-bold italic">no scores available</p> : <Line className="p-10" data={data} options={options} />}
 
