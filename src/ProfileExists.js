@@ -68,7 +68,7 @@ export default function ProfileExists({ current_user }){
 
     useEffect(() => {
         setIsLoading(true)
-        fetch(`http://localhost:3000/users/scores/${current_user.id}`, {
+        fetch(`http://35.247.18.60/users/scores/${current_user.id}`, {
         headers: {
             Authorization: localStorage.getItem("token")
         }
@@ -94,7 +94,7 @@ export default function ProfileExists({ current_user }){
         if (avatar !== null){
             const form = new FormData();
             form.append("avatar", avatar)
-            fetch("http://localhost:3000/avatar", {
+            fetch("http://35.247.18.60/avatar", {
             method: "post",
             headers: {
                 Authorization: localStorage.getItem("token"),
@@ -116,7 +116,7 @@ export default function ProfileExists({ current_user }){
 
     console.log(data.labels)
 
-    console.log(avatar)
+    console.log(highScore)
 
     return (
         <div className="relative w-2/5 mt-14 z-20 rounded-xl justify-center mx-auto flex flex-col h-fit bg-sky-900">
@@ -124,7 +124,7 @@ export default function ProfileExists({ current_user }){
                 <img className="h-32 w-32 object-cover border-4 border-emerald-500" src={avatar.file !== null ? image : current_user.avatar_url ? current_user.avatar_url : "https://avatars.githubusercontent.com/u/35440139?v=4}"}/>
                     <div className="ml-4 flex flex-col h-full w-1/3">
                         <h3 className="text-emerald-500">{current_user.username} <span className="text-xs">place of origin</span></h3>
-                        <p className="text-emerald-500 mb-1">Highscore: {highScore}WPM</p>
+                        <p className="text-emerald-500 mb-1">Highscore: {highScore !== -Infinity ? highScore : 0}WPM</p>
                         <div className="relative w-full">
                                 {avatar.file !== null ? <button className="w-fit bg-emerald-500 px-2 rounded-md text-sky-900 font-bold" onClick={(e) => handleAvatarSubmit(e)}>submit avatar</button> : 
                                     <>

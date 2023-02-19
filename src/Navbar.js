@@ -6,7 +6,7 @@ export default function Navbar({ current_user ,setCurrentUser }){
 
     function handleLogout(){
         let token = localStorage.getItem('token')
-        fetch(`http://localhost:3000/logout`,{
+        fetch(`http://35.247.18.60/logout`,{
             method: "DELETE",
             headers: {
                 Authorization: token
@@ -42,7 +42,7 @@ export default function Navbar({ current_user ,setCurrentUser }){
                             <a onClick={() => navigate('/leaderboard')} className="hover:cursor-pointer hover:underline text-emerald-500">Leaderboard</a>
                         </li>
                         <li className="mx-2">
-                            {current_user.hasOwnProperty('email') ? <a onClick={handleLogout} className="hover:cursor-pointer hover:underline text-emerald-500">Log out</a> : null}
+                            {current_user.hasOwnProperty('email') ? <a onClick={() => handleLogout()} className="hover:cursor-pointer hover:underline text-emerald-500">Log out</a> : null}
                         </li>
                     </ul>
                     {window.location.href.slice(-7) == 'profile' || window.location.href.slice(-12) == 'profile/edit' || !current_user.hasOwnProperty('avatar_url') ? null : <img onClick={() => navigate('/profile')} src={current_user.avatar_url === null || !current_user.hasOwnProperty('avatar_url') ? "https://avatars.githubusercontent.com/u/35440139?v=4}" : current_user.avatar_url} className="h-10 rounded-full object-cover border-emerald-500 border-2 w-10 mr-4 hover:cursor-pointer"/>}

@@ -12,7 +12,7 @@ export default function Signup(){
     function handleSubmit(e){
         e.preventDefault();
         if(emailRegex.test(email) && password.length > 5){
-            fetch("http://localhost:3000/signup", {
+            fetch("http://35.247.18.60/signup", {
             method: "post",
             headers: {
             "Content-Type": "application/json",

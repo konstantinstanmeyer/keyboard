@@ -54,7 +54,7 @@ export default function ViewProfile({ id }){
 
     useEffect(() => {
         setIsLoading(true)
-        fetch(`http://localhost:3000/scores/user/${window.location.href.slice(-2)}`, {
+        fetch(`http://35.247.18.60/scores/user/${window.location.href.slice(-2)}`, {
         })
         .then(r => r.json())
         .then(userData => {

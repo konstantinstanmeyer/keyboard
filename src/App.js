@@ -15,7 +15,7 @@ function App() {
   const [visitedId, setVisitedId] = useState(undefined)
   
   useEffect(()=> {
-    fetch('http://localhost:3000/users/current', {
+    fetch('http://35.247.18.60/users/current', {
       headers: {
           Authorization: localStorage.getItem("token")
       }

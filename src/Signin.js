@@ -42,7 +42,7 @@ export default function Signin({ setCurrentUser }){
     function handleSubmit(e){
         e.preventDefault();
 
-        fetch("http://localhost:3000/login", {
+        fetch("http://35.247.18.60/login", {
         method: "post",
         headers: {
             "Content-Type": "application/json",
@@ -58,7 +58,7 @@ export default function Signin({ setCurrentUser }){
             if (res.ok) {
                 console.log(res);
                 localStorage.setItem("token", res.headers.get("Authorization"))
-                fetch('http://localhost:3000/users/current', {
+                fetch('http://35.247.18.60/users/current', {
                     headers: {
                         Authorization: localStorage.getItem("token")
                     }

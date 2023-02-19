@@ -12,7 +12,7 @@ export default function ProfileEdit({ current_user }){
     function onUserSubmit(e){
         e.preventDefault()
         if (username.length >= 5 && username.length < 20){
-            fetch(`http://localhost:3000/current_user/update`,{
+            fetch(`http://35.247.18.60/current_user/update`,{
             method:'PATCH',
             headers: {
                 Authorization: localStorage.getItem("token"),
@@ -37,7 +37,7 @@ export default function ProfileEdit({ current_user }){
     }
 
     useEffect(()=> {
-        fetch('http://localhost:3000/users/current', {
+        fetch('http://35.247.18.60/users/current', {
           headers: {
               Authorization: localStorage.getItem("token")
           }

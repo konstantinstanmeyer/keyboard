@@ -107,7 +107,7 @@ export default function Test({ current_user }){
     useEffect(() => {
         if(textStyle == "random"){
             setIsLoading(true)
-            fetch(`http://localhost:3000/words/${wordCount}`)
+            fetch(`http://35.247.18.60/words/${wordCount}`)
             .then(r => r.json())
             .then(r => {
                 setWord(r[0])
@@ -200,7 +200,7 @@ export default function Test({ current_user }){
             user_id: current_user.id
         })
 
-        fetch('http://localhost:3000/score', {
+        fetch('http://35.247.18.60/score', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -224,7 +224,7 @@ export default function Test({ current_user }){
         setBlur(false)
         if(textStyle === "bacon"){
             setIsLoading(true)
-            fetch('http://localhost:3000/bacon')
+            fetch('http://35.247.18.60/bacon')
             .then(r => r.json())
             .then(data => {
                 data[0] = data[0].slice(2)
@@ -233,7 +233,7 @@ export default function Test({ current_user }){
             })
         } else if (textStyle === "random" && loadedOnce){
             setIsLoading(true)
-            fetch(`http://localhost:3000/words/${wordCount}`)
+            fetch(`http://35.247.18.60/words/${wordCount}`)
             .then(r => r.json())
             .then(r => {
                 setWord(r[0])
@@ -241,7 +241,7 @@ export default function Test({ current_user }){
             })
         } else if (textStyle == "quote") {
             setIsLoading(true);
-            fetch(`http://localhost:3000/quote/${language}`)
+            fetch(`http://35.247.18.60/quote/${language}`)
             .then(r => r.json())
             .then(data => {
                 setWord(data.results[0].quote.split(" ").slice(0, 25).join(" ") + " ")
@@ -255,7 +255,7 @@ export default function Test({ current_user }){
     useEffect(() => {
         if (textStyle === "quote"){
             setIsLoading(true);
-            fetch(`http://localhost:3000/quote/${language}`)
+            fetch(`http://35.247.18.60/quote/${language}`)
             .then(r => r.json())
             .then(data => {
                 setWord(data.results[0].quote.split(" ").slice(0, 25).join(" ") + " ")
