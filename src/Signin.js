@@ -75,7 +75,7 @@ export default function Signin({ setCurrentUser }){
     }
 
     return(
-        <div className="h-fit w-1/4 bg-sky-900 mx-auto rounded-md relative mt-14">
+        <div className="h-fit w-1/4 bg-sky-900 mx-auto rounded-md relative mt-14 shadow-xl">
             <div className="py-10">
             <img className="h-24 w-24 m-auto mb-5" alt="signin" src="https://cdn-icons-png.flaticon.com/512/2648/2648647.png"/>
             <h5 className="text-emerald-500 text-center text-xl pb-5 mx-5"><strong>Enter Valid Login Credentials:</strong></h5>

@@ -25,7 +25,7 @@ export default function Navbar({ current_user ,setCurrentUser }){
 
     return(
         <div className="relative w-3/4 z-20 mx-auto pt-20">
-            <div className="bg-sky-900 flex flex-row items-center w-3/4 h-14 mx-auto rounded-xl relative">
+            <div className="bg-sky-900 flex flex-row items-center w-3/4 h-14 mx-auto rounded-xl relative shadow-xl">
                 <h3 className="text-lg ml-2 font-bold w-fit px-2 text-emerald-500 select-none">Typing App</h3>
                 <li className="mx-2 list-none">
                     <a onClick={() => navigate('/')} className="hover:cursor-pointer hover:underline text-emerald-500">Play</a>

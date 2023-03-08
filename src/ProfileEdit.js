@@ -5,12 +5,15 @@ export default function ProfileEdit({ current_user }){
     const [viewOrigin, setViewOrigin] = useState(false)
     const [username, setUsername] = useState("")
     const [viewScore, setViewScore] = useState(false)
+    const [origin, setOrigin] = useState("")
     const [viewProfile, setViewProfile] = useState(false)
     const [changeUsername, setChangeUsername] = useState(false)
+    const [changeOrigin, setChangeOrigin] = useState(false)
     const navigate = useNavigate();
 
     function onUserSubmit(e){
         e.preventDefault()
+        console.log(origin)
         if (username.length >= 5 && username.length < 20){
             fetch(`http://localhost:3000/current_user/update`,{
             method:'PATCH',
@@ -22,7 +25,8 @@ export default function ProfileEdit({ current_user }){
                 username: username,
                 "view_profile?": viewProfile,
                 "view_origin?": viewOrigin,
-                "view_high_score?": viewScore
+                "view_high_score?": viewScore,
+                origin: origin
             })
             })
             .then((r) => r.json())
@@ -48,17 +52,18 @@ export default function ProfileEdit({ current_user }){
                   setViewScore(r["view_high_score?"])
                   setViewOrigin(r["view_origin?"])
                   setViewProfile(r["view_profile?"])
+                  setOrigin(r.origin)
                   setUsername(r.username)
               } else {
                   console.log("not signed in")
               }
           })
-      }, [])
+    }, [])
 
     console.log(viewScore, viewOrigin, viewProfile)
 
     return (
-        <div className="relative w-1/4 mt-14 z-20 rounded-xl mx-auto flex flex-col h-fit bg-sky-900">
+        <div className="relative w-1/4 mt-10 z-20 rounded-xl mx-auto flex flex-col h-fit bg-sky-900">
             <p onClick={() => navigate('/profile')} className="z-40 absolute left-4 top-3 bg-emerald-500 text-sky-900 text-sm px-2 rounded-md font-bold hover:cursor-pointer">{"<="} go back</p>
             <div className="flex flex-col justify-center relative m-6">
                 <img className="h-32 w-32 mx-auto object-cover border-4 border-emerald-500 rounded-md" src={current_user.avatar_url ? current_user.avatar_url : "https://avatars.githubusercontent.com/u/35440139?v=4}"}/>
@@ -67,6 +72,9 @@ export default function ProfileEdit({ current_user }){
             <div className="w-1/2 mx-auto">
                 <div className="dropdown dropdown-right h-10 flex items-center justify-center">
                     {!changeUsername ? <button onClick={() => setChangeUsername(true)} className="hover:bg-emerald-300 h-6 bg-emerald-500 rounded-md w-full text-sky-900 text-sm font-bold">change username</button> : <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="5+ characters" className="bg-emerald-500 h-6 border-[3px] border-emerald-300 rounded-md w-full placeholder-sky-900/70 text-sky-900 font-bold text-sm text-center"/>}
+                </div>
+                <div className="dropdown dropdown-right h-10 flex items-center justify-center">
+                    {!changeOrigin ? <button onClick={() => setChangeOrigin(true)} className="hover:bg-emerald-300 h-6 bg-emerald-500 rounded-md w-full text-sky-900 text-sm font-bold">change origin</button> : <input value={origin} onChange={(e) => setOrigin(e.target.value)} placeholder="5+ characters" className="bg-emerald-500 h-6 border-[3px] border-emerald-300 rounded-md w-full placeholder-sky-900/70 text-sky-900 font-bold text-sm text-center"/>}
                 </div>
             </div>
             <div className="w-1/2 mx-auto">

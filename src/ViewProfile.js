@@ -23,7 +23,7 @@ export default function ViewProfile({ id }){
     const [isLoading, setIsLoading] = useState(false)
     const [highScore, setHighScore] = useState(0)
     const [data, setData] = useState({
-        labels: [],
+        labels: ["","","","","","","","","",""],
         datasets: [{
             data: [],
             backgroundColor: "transparent",
@@ -72,10 +72,11 @@ export default function ViewProfile({ id }){
             data.datasets[0].data = userData.scores.map((value) => {
                 return value.score;
             }).slice(-10)
-            data.datasets[0].data.forEach(() => data.labels.push(""))
             setIsLoading(false)
         })
     }, [])
+
+    console.log(user)
     
     if (!user["view_profile?"]) return <PrivateProfile />
 
@@ -87,12 +88,12 @@ export default function ViewProfile({ id }){
                 </div>
                 <div className="h-fit mx-auto">
                     <div className="ml-4 flex flex-col h-full w-full">
-                        <h3 className="pt-3 text-emerald-500">{user.username} <span className="text-xs">place of origin</span></h3>
-                        <p className="text-emerald-500 mt-2">Highscore: {highScore} WPM</p>
+                        <h3 className="pt-3 text-emerald-500">{user.username} <span className="text-xs">Origin: {user.origin ? user.origin : "N/A"}</span></h3>
+                        <p className="text-emerald-500 mt-2">Highscore: {highScore ? highScore : 0} WPM</p>
                     </div>
                 </div>
             </div>
-            <h2 className="text-center text-lg underline underline-offset-4 italic text-emerald-500">previous rounds</h2>
+            <h2 className="text-center text-lg underline underline-offset-4 italic text-emerald-500">previous ten rounds</h2>
             <div className="">
                 {isLoading || data.datasets[0].data.length == 0 ? <p className="pb-5 text-center text-emerald-500 font-bold italic">no scores available</p> : <Line className="p-10" data={data} options={options} />}
 

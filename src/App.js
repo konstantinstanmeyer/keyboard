@@ -32,37 +32,38 @@ function App() {
   }, [])
 
   return (
-    <div className="bg-emerald-500 fixed w-screen h-screen justify-center">
-      <Router>
-        <Navbar setCurrentUser={setCurrentUser} current_user={currentUser} />
-        <Routes>
-          <Route exact path="/" element={
-            <Test current_user={currentUser} />
-          }/>
-          <Route path="/signin" element={
-            <Signin setCurrentUser={setCurrentUser} />
-          }/>
-          <Route path="/signup" element={
-            <Signup />
-          }/>
-          <Route path="/leaderboard" element={
-            <Leaderboard setVisitedId={setVisitedId} />
-          }/>
-          <Route path="/profile" element={
-            <Profile current_user={currentUser} />
-          }/>
-          <Route path="/profile/edit" element={
-            <ProfileEdit current_user={currentUser} />
-          }/>
-          <Route path="/profile/:id" element={
-            <ViewProfile id={visitedId} />
-          }/>
-          <Route path="/info" element={
-            <Info />
-          }/>
-        </Routes>
-      </Router>
-    </div>
+      <div className="relative w-screen h-auto justify-center">
+        <div className="fixed h-screen w-screen bg-emerald-500 -z-40"></div>
+        <Router>
+          <Navbar setCurrentUser={setCurrentUser} current_user={currentUser} />
+          <Routes>
+            <Route exact path="/" element={
+              <Test current_user={currentUser} />
+            }/>
+            <Route path="/signin" element={
+              <Signin setCurrentUser={setCurrentUser} />
+            }/>
+            <Route path="/signup" element={
+              <Signup setCurrentUser={setCurrentUser} />
+            }/>
+            <Route path="/leaderboard" element={
+              <Leaderboard setVisitedId={setVisitedId} />
+            }/>
+            <Route path="/profile" element={
+              <Profile current_user={currentUser} />
+            }/>
+            <Route path="/profile/edit" element={
+              <ProfileEdit current_user={currentUser} />
+            }/>
+            <Route path="/profile/:id" element={
+              <ViewProfile id={visitedId} />
+            }/>
+            <Route path="/info" element={
+              <Info />
+            }/>
+          </Routes>
+        </Router>
+      </div>
   );
 }
 
