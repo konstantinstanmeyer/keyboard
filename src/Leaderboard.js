@@ -10,7 +10,7 @@ export default function Leaderboard(){
 
     useEffect(() => {
         setIsLoading(true)
-        fetch('http://localhost:3000/users')
+        fetch('http://35.247.18.60/users')
         .then(response => response.json())
         .then(data => {
             setUsers(data)

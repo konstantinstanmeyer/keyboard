@@ -13,7 +13,7 @@ export default function Signup({ setCurrentUser }){
     function handleSubmit(e){
         e.preventDefault();
         if(emailRegex.test(email) && password.length > 5){
-            fetch("http://localhost:3000/signup", {
+            fetch("http://35.247.18.60/signup", {
             method: "post",
             headers: {
             "Content-Type": "application/json",
@@ -29,7 +29,7 @@ export default function Signup({ setCurrentUser }){
             if (res.ok) {
                 console.log(res.headers.get("Authorization"));
                 localStorage.setItem("token", res.headers.get("Authorization"));
-                fetch("http://localhost:3000/login", {
+                fetch("http://35.247.18.60/login", {
                     method: "post",
                     headers: {
                         "Content-Type": "application/json",
@@ -45,7 +45,7 @@ export default function Signup({ setCurrentUser }){
                     if (res.ok) {
                         console.log(res);
                         localStorage.setItem("token", res.headers.get("Authorization"))
-                        fetch('http://localhost:3000/users/current', {
+                        fetch('http://35.247.18.60/users/current', {
                             headers: {
                                 Authorization: localStorage.getItem("token")
                             }

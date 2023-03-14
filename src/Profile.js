@@ -8,7 +8,7 @@ export default function Profile({ current_user }){
     const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
-        fetch('http://localhost:3000/users/current', {
+        fetch('http://35.247.18.60/users/current', {
         headers: {
             Authorization: localStorage.getItem("token")
         }

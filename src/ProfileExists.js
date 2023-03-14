@@ -68,7 +68,7 @@ export default function ProfileExists({ current_user }){
 
     useEffect(() => {
         setIsLoading(true)
-        fetch(`http://localhost:3000/users/scores/${current_user.id}`, {
+        fetch(`http://35.247.18.60/users/scores/${current_user.id}`, {
         headers: {
             Authorization: localStorage.getItem("token")
         }
@@ -94,7 +94,7 @@ export default function ProfileExists({ current_user }){
         if (avatar !== null){
             const form = new FormData();
             form.append("avatar", avatar)
-            fetch("http://localhost:3000/avatar", {
+            fetch("http://35.247.18.60/avatar", {
             method: "post",
             headers: {
                 Authorization: localStorage.getItem("token"),

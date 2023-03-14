@@ -6,7 +6,7 @@ export default function Navbar({ current_user ,setCurrentUser }){
 
     function handleLogout(){
         let token = localStorage.getItem('token')
-        fetch(`http://localhost:3000/logout`,{
+        fetch(`http://35.247.18.60/logout`,{
             method: "DELETE",
             headers: {
                 Authorization: token
