@@ -13,7 +13,7 @@ export default function ProfileEdit({ current_user }){
 
     function onUserSubmit(e){
         e.preventDefault()
-        console.log(origin)
+        // console.log(origin)
         if (username.length >= 5 && username.length < 20){
             fetch(`http://35.247.18.60/current_user/update`,{
             method:'PATCH',

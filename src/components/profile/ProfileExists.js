@@ -21,7 +21,6 @@ ChartJS.defaults.color = "#22c55e";
 export default function ProfileExists({ current_user }){
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false)
-    const [avatarLoading, setAvatarLoading] = useState(false)
     const [highScore, setHighScore] = useState(0)
     const [avatar, setAvatar] = useState({
         file:null
@@ -114,9 +113,9 @@ export default function ProfileExists({ current_user }){
         }
     }
 
-    console.log(data.labels)
+    // console.log(data.labels)
 
-    console.log(avatar)
+    // console.log(avatar)
 
     return (
         <div className="relative w-2/5 mt-14 z-20 rounded-xl justify-center mx-auto flex flex-col h-fit bg-sky-900">

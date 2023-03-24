@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import Keyboard from "./components/Keyboard";
+import getErrors from "../util/getErrors";
 
 export default function Test({ current_user }){
     const [word, setWord] = useState("");
@@ -57,14 +58,6 @@ export default function Test({ current_user }){
         return () => clearTimeout(keyDownTimer);
     }, [])
 
-    function validatedWords(word){
-        let lettersArray = [];
-        word.split("").forEach((wordy) => {
-            lettersArray.push(<span id={`${uuidv4()}`} className="text-2xl text-sky-900">{wordy}</span>);
-        });
-        return lettersArray;
-    }
-
     useEffect(() => {
         if(gameState === "not started" && inputValue !== "") {
             setGameState("started");
@@ -77,28 +70,6 @@ export default function Test({ current_user }){
             // fixErrors()
         }
     }, [inputValue])
-
-    function fixErrors(){
-        let spans = document.querySelectorAll('span');
-        for (let i=0; i<spans.length; i++){
-            if(i < characterIndex && !spans[i].classList.contains('text-red-500') || i < characterIndex - 1 && !spans[i].classList.contains('text-red-500')){
-                spans[i].classList.add('text-green-500');
-            } else if (i > characterIndex - 1){
-                spans[i].classList.remove('text-green-500', 'text-red-500');
-            }
-        }
-    }
-
-    function getErrors(){
-        let errors = 0;
-        let spans = document.querySelectorAll('span');
-        spans.forEach((span) => {
-            if (span.classList.contains('text-red-500')){
-                errors++;
-            }
-        })
-        return errors;
-    }
 
     useEffect(() => {
         if(textStyle == "random"){
@@ -116,6 +87,42 @@ export default function Test({ current_user }){
         let focus = document.querySelector("#input1");
         focus.focus();
     }, [wordCount])
+
+    useEffect(() => {
+        if (gameState === "started" && characterIndex == word.length - 1) {
+            inputField.disabled = true;
+            setDisplayResult(true);
+            setWpm(getWpm());
+            setAccuracy(getAccuracy());
+            setGameState("finished");
+            console.log("done");
+        }
+
+        const spans = document.querySelectorAll('span');
+
+        spans.forEach((span) => span.classList.remove('underline'));
+
+        if(characterIndex !== spans.length) spans[characterIndex].classList.add('underline');
+    }, [characterIndex])
+
+    function validatedWords(word){
+        let lettersArray = [];
+        word.split("").forEach((wordy) => {
+            lettersArray.push(<span id={`${uuidv4()}`} className="text-2xl text-sky-900">{wordy}</span>);
+        });
+        return lettersArray;
+    }
+
+    // function fixErrors(){
+    //     let spans = document.querySelectorAll('span');
+    //     for (let i=0; i<spans.length; i++){
+    //         if(i < characterIndex && !spans[i].classList.contains('text-red-500') || i < characterIndex - 1 && !spans[i].classList.contains('text-red-500')){
+    //             spans[i].classList.add('text-green-500');
+    //         } else if (i > characterIndex - 1){
+    //             spans[i].classList.remove('text-green-500', 'text-red-500');
+    //         }
+    //     }
+    // }
 
     function resetGame(){
         setGameState("not started");
@@ -182,21 +189,46 @@ export default function Test({ current_user }){
     }, [timeElapsed])
 
     useEffect(() => {
-        if (gameState === "started" && characterIndex == word.length - 1) {
-            inputField.disabled = true;
-            setDisplayResult(true);
-            setWpm(getWpm());
-            setAccuracy(getAccuracy());
-            setGameState("finished");
-            console.log("done");
+        if(textStyle === "bacon"){
+            setIsLoading(true);
+            fetch('http://35.247.18.60/bacon')
+            .then(r => r.json())
+            .then(data => {
+                data[0] = data[0].slice(2);
+                setWord(data.slice(0,25).join(" ") + " ");
+                setIsLoading(false);
+            })
+        } else if (textStyle === "random" && loadedOnce){
+            setIsLoading(true);
+            fetch(`http://35.247.18.60/words/${wordCount}`)
+            .then(r => r.json())
+            .then(r => {
+                setWord(r[0]);
+                setIsLoading(false);
+            })
+        } else if (textStyle == "quote") {
+            setIsLoading(true);
+            fetch(`http://35.247.18.60/quote/${language}`)
+            .then(r => r.json())
+            .then(data => {
+                setWord(data.results[0].quote.split(" ").slice(0, 25).join(" ") + " ");
+                setIsLoading(false);
+            })
         }
+    }, [textStyle])
 
-        const spans = document.querySelectorAll('span');
-
-        spans.forEach((span) => span.classList.remove('underline'));
-
-        if(characterIndex !== spans.length) spans[characterIndex].classList.add('underline');
-    }, [characterIndex])
+    useEffect(() => {
+        if (textStyle === "quote"){
+            setIsLoading(true);
+            fetch(`http://35.247.18.60/quote/${language}`)
+            .then(r => r.json())
+            .then(data => {
+                setWord(data.results[0].quote.split(" ").slice(0, 25).join(" ") + " ");
+                setIsLoading(false);
+            })
+            setBlur(false);
+        }
+    }, [language])
 
     function getWpm(){
         return Math.round((((characterIndex - errors) / 5) / (timeElapsed)) * 60);
@@ -254,48 +286,6 @@ export default function Test({ current_user }){
             c('score submitted successfully!');
         })
     }
-
-    useEffect(() => {
-        if(textStyle === "bacon"){
-            setIsLoading(true);
-            fetch('http://35.247.18.60/bacon')
-            .then(r => r.json())
-            .then(data => {
-                data[0] = data[0].slice(2);
-                setWord(data.slice(0,25).join(" ") + " ");
-                setIsLoading(false);
-            })
-        } else if (textStyle === "random" && loadedOnce){
-            setIsLoading(true);
-            fetch(`http://35.247.18.60/words/${wordCount}`)
-            .then(r => r.json())
-            .then(r => {
-                setWord(r[0]);
-                setIsLoading(false);
-            })
-        } else if (textStyle == "quote") {
-            setIsLoading(true);
-            fetch(`http://35.247.18.60/quote/${language}`)
-            .then(r => r.json())
-            .then(data => {
-                setWord(data.results[0].quote.split(" ").slice(0, 25).join(" ") + " ");
-                setIsLoading(false);
-            })
-        }
-    }, [textStyle])
-
-    useEffect(() => {
-        if (textStyle === "quote"){
-            setIsLoading(true);
-            fetch(`http://35.247.18.60/quote/${language}`)
-            .then(r => r.json())
-            .then(data => {
-                setWord(data.results[0].quote.split(" ").slice(0, 25).join(" ") + " ");
-                setIsLoading(false);
-            })
-            setBlur(false);
-        }
-    }, [language])
 
     if (textStyle === "bacon" && wordCount !== 25){
         setWordCount(25);

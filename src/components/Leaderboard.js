@@ -6,15 +6,12 @@ export default function Leaderboard(){
     const [users, setUsers] = useState([])
     const [style, setStyle] = useState("random")
     const [wordCount, setWordCount] = useState(25)
-    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
-        setIsLoading(true)
         fetch('http://35.247.18.60/users')
         .then(response => response.json())
         .then(data => {
             setUsers(data)
-            setIsLoading(false)
         })
     }, [])
 

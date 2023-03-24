@@ -56,7 +56,7 @@ export default function Signin({ setCurrentUser }){
         })
         .then((res) => {
             if (res.ok) {
-                console.log(res);
+                // console.log(res);
                 localStorage.setItem("token", res.headers.get("Authorization"))
                 fetch('http://35.247.18.60/users/current', {
                     headers: {

@@ -5,7 +5,7 @@ import Signin from './components/Signin';
 import Navbar from './components/Navbar';
 import Leaderboard from './components/Leaderboard';
 import Profile from './components/profile/Profile';
-import Signup from './components/SIgnup';
+import Signup from './components/Signup';
 import Info from './components/Info';
 import ProfileEdit from './components/profile/ProfileEdit';
 import ViewProfile from './components/profile/ViewProfile';
