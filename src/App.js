@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Test from './Test';
-import Signin from './Signin';
-import Navbar from './Navbar';
-import Leaderboard from './Leaderboard';
-import Profile from './Profile';
-import Signup from './Signup';
-import Info from './Info';
-import ProfileEdit from './ProfileEdit';
+import Signin from './components/Signin';
+import Navbar from './components/Navbar';
+import Leaderboard from './components/Leaderboard';
+import Profile from './components/profile/Profile';
+import Signup from './components/SIgnup';
+import Info from './components/Info';
+import ProfileEdit from './components/profile/ProfileEdit';
 import ViewProfile from './ViewProfile';
 
 function App() {

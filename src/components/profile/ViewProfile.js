@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Chart, Line } from 'react-chartjs-2';
-import PrivateProfile from './PrivateProfile';
+import PrivateProfile from './components/PrivateProfile';
 import {
     Chart as ChartJS,
     LineElement,

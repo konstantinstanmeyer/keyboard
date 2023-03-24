@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import Keyboard from "./Keyboard";
+import Keyboard from "./components/Keyboard";
 
 export default function Test({ current_user }){
     const [word, setWord] = useState("");
