@@ -1,70 +1,22 @@
-# Getting Started with Create React App
+### Live Link
+[Keyboard-Typing](http://keyboard-typing.com)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Backend Repo
+[Backend](https://github.com/konstantinstanmeyer/keyboard2)
 
-## Available Scripts
+## Summary
 
-In the project directory, you can run:
+This is a simple web-application that allows users to record typing speeds against multiple game-modes and time restraints. The idea for this site came from regularly using similar applications (main inspiration coming from [monkeytype](https://monkeytype.com/)), and a love for rebuilding websites in a more custom, "me"-focused way. Having recreated the main features I enjoy from a collection of similar websites, this app functions to accomplish four simple goals:
 
-### `npm start`
+1) Practice typing against simple, fun game-modes
+2) Record your scores
+3) Compare high-scores to others and yourself on a global leaderboard
+4) Observe past scores to watch for improvement
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+This site was built with a React front-end (create-react-app), and utilizes a [Ruby-on-Rails RESTful API](https://github.com/konstantinstanmeyer/keyboard2) to store and fetch data from a PostgreSQL database. It is using two APIs to fetch external words/sentences: [Paper Quotes](https://paperquotes.com/), implemented to fetch punctuated and complex sentences, supporting mulitple languages as well, and [Bacon Ipsum](https://baconipsum.com/json-api/), a comedic API to fetch punctuated, difficult sentences with irregular, "pork-related" terms. User images are additionally being stored using ActiveStorage within Rails 7, saving to a Google Cloud virtual machines's local storage.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Future Goals
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1) Implement more game-modes. APIs seem to be the bottleneck with this, having used the two APIs I saw being best-fit already. This is definitely something I'll to come back to, hopefully after having found a better resource for words, or potentially after building my own API with a rich database of sentences and words.
+2) Adding an automation for Github deployments. Although SSHing from my local machine into the deployed Google Cloud instance is not too time-involving, setting up [PM2](https://pm2.keymetrics.io/) to handle these actions would be extremely helpful for larger-scale production deployments, avoiding downtime and separate team members requiring to SSH.
+3) Test game logic. Although the site functions and handles user input correctly, issues with input lag and css responses slowed the original development process greatly. For example, grabbing important character values (which typed values are correct, which is the current character, etc.) and general event listeners could be reworked into JQuery for more optimal code.
